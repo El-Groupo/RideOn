@@ -1,0 +1,101 @@
+package Models;
+
+public class Event {
+    /** event ID */
+    private String eventID;
+    /**
+     * users username
+     */
+    private String associatedUsername;
+    /** person to which the event belongs' ID*/
+    private String personID;
+    /** latitude of event */
+    private float latitude;
+    /** longitude of event */
+    private float longitude;
+    /** country of event */
+    private String country;
+    /** city of event */
+    private String city;
+    /** type of event */
+    private String eventType;
+    /** year of event */
+    private int year;
+
+    public Event() {
+    }
+
+    public void setEventID(String id){
+        eventID = id;
+    }
+    /**
+     *checks to see if ID is unique
+     *looks in eventTable to make this check
+     *@param ID the eventID given by setEventID
+     *@return true if ID is unique, false if not
+     */
+    public boolean checkEventID(String ID){
+        boolean yes = true;
+        return yes;
+    }
+    public String getEventID(){return eventID;}
+    public void setUsername(String userN) {
+        associatedUsername = userN;
+    }
+    public String getUsername() {return associatedUsername;}
+    public void setPersonID(String pID){
+        personID = pID;
+    }
+    public String getPersonID(){return personID;}
+    public void setLatitude(Float lat){
+        latitude = lat;
+    }
+    public float getLatitude(){return latitude;}
+    public void setLongitude(Float longit){
+        longitude = longit;
+    }
+    public float getLongitude(){return longitude;}
+    public void setCountry(String count){
+        country = count;
+    }
+    public String getCountry(){return country;}
+    public void setCity(String cit){
+        city = cit;
+    }
+    public String getCity(){return city;}
+    public void setEventType(String type){
+        eventType = type;
+    }
+    public String getEventType(){return eventType;}
+    public void setYear(int year){
+        this.year = year;
+    }
+    public int getYear(){return year;}
+
+    /**
+     *checks to see if two events are equal
+     *@param o the object that is being compared
+     *@return true if equal, false if not
+     */
+    @Override
+    public boolean equals(Object o){
+        if (o == null) {
+            return false;
+        }
+        if (o instanceof Event) {
+            Event oEvent = (Event) o;
+            return oEvent.getEventID().equals(getEventID()) &&
+                    oEvent.getPersonID().equals(getPersonID()) &&
+                    oEvent.getLatitude() == (getLatitude()) &&
+                    oEvent.getLongitude() == (getLongitude()) &&
+                    oEvent.getCountry().equals(getCountry()) &&
+                    oEvent.getCity().equals(getCity()) &&
+                    oEvent.getEventType().equals(getEventType()) &&
+                    (oEvent.getYear() == (getYear()));
+        }
+        else {
+            return false;
+        }
+
+    }
+}
