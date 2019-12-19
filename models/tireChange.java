@@ -6,60 +6,50 @@ public class tireChange {
     /** assiciated user*/
     private String associatedUsername;
     /** toy type */
-    private String frontSize;
+    private int frontSize;
     /** vehicle's year */
     private int hoursSinceChangeFront;
     /** vehicle's make */
-    private String rearSize;
+    private int rearSize;
     /** vehicle's model */
-    private String hoursSinceChangeRear;
+    private int hoursSinceChangeRear;
     /** vehicle's registration month */
-    private String totalMiles;
+    private int totalMiles;
 
     public Garage() {
     }
 
 
-    public void setNickname(String nickname){
+    public void setToyNickname(String nickname){
         toyNickname = nickname;
     }
-    public String getNickname(){ return toyNickname;}
+    public String getToyNickname(){ return toyNickname;}
 	
 	public void setAssociatedUsername(String username){
         associatedUsername = username;
     }
     public String getAssociatedUsername(){ return associatedUsername;}
 	
-	public void setToyType(String type){
-        toyType = type;
+	public void setFrontSize(int size){
+        frontSize = size;
     }
-    public String getToyType(){ return toyType;}
+    public String getFrontSize(){ return frontSize;}
 	
-	public void setYear(String year){
-        this->year = year;
+	public void setHoursSinceChangeFront(int hours){
+        hoursSinceChangeFront = hours;
     }
-    public int getYear(){ return year;}
+    public int getHoursSinceChangeFront(){ return hoursSinceChangeFront;}
 	
-	public void setMake(String make){
-        this->make = make;
+	public void setHoursSinceChangeRear(int hours){
+        hoursSinceChangeRear = hours;
     }
-    public String getMake(){ return make;}
+    public String getHoursSinceChangeRear(){ return hoursSinceChangeRear;}
 	
-	public void setModel(String model){
-        this->model = model;
+	public void setTotalMiles(int miles){
+        totalMiles = miles;
     }
-    public String getModel(){ return model;}
-	
-	public void setRegistrationMonth(String month){
-        registrationMonth = month;
-    }
-    public String getRegistrationMonth(){ return registrationMonth;}
-	
-	public void setDateOfPurchase(Date purchaseDate){
-        dateOfPurchase = purchaseDate;
-    }
-    public Date getDateOfPurchase(){ return dateOfPurchase;}
-    
+    public String getTotalMiles(){ return totalMiles;}
+
 
     /**
      *checks to see if two garage entries are equal
