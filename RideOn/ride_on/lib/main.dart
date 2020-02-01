@@ -109,8 +109,15 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           
           children: <Widget>[
-            Text(
+            Container(
+              constraints: BoxConstraints.expand(
+                width: 350,                           //FIXME - Magic number
+                height: 500,                          //FIXME - Magic number
+              ),
+              decoration: BoxDecoration(color: Colors.blue[200]),
+              child: Text(
               'Here will be the map',
+            ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -122,6 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   'Record',
                 ),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       'Top Speed',
