@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-
+String dropdownValue = 'name';
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("useerName"),
+              accountName: Text("userName"),
               accountEmail: Text("userEmail@gmail.com"),
               currentAccountPicture: CircleAvatar(
                 backgroundColor:
@@ -90,24 +91,37 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               title: Text("Home"),
-              
+              onTap: () {
+                Navigator.pop(context);  //close drawer
+                //Navigator.of(context).push(MaterialPageRoute(
+                   // builder: (BuildContext context) => NewPage("Page two")));
+              },
             ),
             ListTile(
               title: Text("Garage"),
-              
+              onTap: () {
+                Navigator.pop(context);  //close drawer
+                //Navigator.of(context).push(MaterialPageRoute(
+                   // builder: (BuildContext context) => NewPage("Page two")));
+              },
             ),
             ListTile(
               title: Text("History"),
-              
+              onTap: () {
+                Navigator.pop(context);  //close drawer
+                //Navigator.of(context).push(MaterialPageRoute(
+                   // builder: (BuildContext context) => NewPage("Page two")));
+              },
             ),
           ]
         ),
       ),
+
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
               constraints: BoxConstraints.expand(
@@ -116,8 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               decoration: BoxDecoration(color: Colors.blue[200]),
               child: Text(
-              'Here will be the map',
-            ),
+                'Here will be the map',
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -125,8 +139,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 Text(
                   'Current Toy',
                 ),
-                Text(
-                  'Record',
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    FloatingActionButton(
+                      onPressed: _incrementCounter,
+                      tooltip: 'Increment',
+                      //child: Icon(Icons.),
+                    ),
+                    Text(
+                      'Record',
+                    ),
+                  ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -145,11 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+
