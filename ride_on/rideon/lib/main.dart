@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
 String dropdownValue = 'name';
   @override
   Widget build(BuildContext context) {
@@ -128,7 +129,7 @@ String dropdownValue = 'name';
                 width: 350,                           //FIXME - Magic number
                 height: 500,                          //FIXME - Magic number
               ),
-              decoration: BoxDecoration(color: Colors.blue[200]),
+              decoration: BoxDecoration(color: Colors.blue[100]),
               child: Text(
                 'Here will be the map',
               ),
@@ -142,13 +143,13 @@ String dropdownValue = 'name';
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
+                    Text(
+                      'Record',
+                    ),
                     FloatingActionButton(
                       onPressed: _incrementCounter,
                       tooltip: 'Increment',
                       //child: Icon(Icons.),
-                    ),
-                    Text(
-                      'Record',
                     ),
                   ],
                 ),
