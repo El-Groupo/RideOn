@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'screens/garage.dart';
+import 'screens/history.dart';
 
 void main() => runApp(MyApp());
 
@@ -57,8 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-
 String dropdownValue = 'name';
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -93,6 +94,7 @@ String dropdownValue = 'name';
             ListTile(
               title: Text("Home"),
               onTap: () {
+
                 Navigator.pop(context);  //close drawer
                 //Navigator.of(context).push(MaterialPageRoute(
                    // builder: (BuildContext context) => NewPage("Page two")));
@@ -102,6 +104,11 @@ String dropdownValue = 'name';
               title: Text("Garage"),
               onTap: () {
                 Navigator.pop(context);  //close drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GarageRoute()),
+                );
+
                 //Navigator.of(context).push(MaterialPageRoute(
                    // builder: (BuildContext context) => NewPage("Page two")));
               },
@@ -110,8 +117,13 @@ String dropdownValue = 'name';
               title: Text("History"),
               onTap: () {
                 Navigator.pop(context);  //close drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HistoryRoute()),
+                );
+
                 //Navigator.of(context).push(MaterialPageRoute(
-                   // builder: (BuildContext context) => NewPage("Page two")));
+                // builder: (BuildContext context) => NewPage("Page two")));
               },
             ),
           ]
@@ -129,7 +141,7 @@ String dropdownValue = 'name';
                 width: 350,                           //FIXME - Magic number
                 height: 500,                          //FIXME - Magic number
               ),
-              decoration: BoxDecoration(color: Colors.blue[100]),
+              decoration: BoxDecoration(color: Colors.blue[200]),
               child: Text(
                 'Here will be the map',
               ),
@@ -143,13 +155,13 @@ String dropdownValue = 'name';
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text(
-                      'Record',
-                    ),
                     FloatingActionButton(
                       onPressed: _incrementCounter,
                       tooltip: 'Increment',
                       //child: Icon(Icons.),
+                    ),
+                    Text(
+                      'Record',
                     ),
                   ],
                 ),
@@ -173,4 +185,5 @@ String dropdownValue = 'name';
     );
   }
 }
+
 

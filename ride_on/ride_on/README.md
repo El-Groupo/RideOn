@@ -1,4 +1,4 @@
-# rideon
+# ride_on
 
 RideOn app
 

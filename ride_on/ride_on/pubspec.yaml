@@ -1,4 +1,4 @@
-name: rideon
+name: ride_on
 description: RideOn app
 
 # The following defines the version and build number for your application.
@@ -20,8 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # Add the dependency for the Firebase Core Flutter SDK
-  firebase_core: ^0.4.0+9
+  firebase_core: ^0.4.0+9   #used for firebase
+
   # Add the dependency for the FlutterFire plugin for Google Analytics
   firebase_analytics: ^5.0.2
 

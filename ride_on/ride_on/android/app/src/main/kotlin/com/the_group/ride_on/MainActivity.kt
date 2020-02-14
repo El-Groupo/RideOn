@@ -1,4 +1,4 @@
-package com.the_group.rideon
+package com.the_group.ride_on
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
