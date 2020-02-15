@@ -11,20 +11,13 @@ class AccountRoute extends StatelessWidget {
       drawer: HamburgerMenu(),
       body: Center(
         child: Column(
-            children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                  children: <Widget>[
-                    Text('Ride Date'),
-                    Text('Toy Name'),
-                    Text('Ride Duration'),
-                    Text('Yeet'),
-                  ]
-              ),
-              //garage entries
-
-            ]
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text('Username: IBeDaUser'),
+            Text('email: userEmail@gmail.com'),
+            Text('Quest: To seek the holy grail'),
+            Text('Favorite Color: Green'),
+          ]
         ),
       ),
     );

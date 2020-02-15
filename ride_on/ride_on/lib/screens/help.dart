@@ -11,19 +11,10 @@ class HelpRoute extends StatelessWidget {
       drawer: HamburgerMenu(),
       body: Center(
         child: Column(
-            children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                  children: <Widget>[
-                    Text('Ride Date'),
-                    Text('Toy Name'),
-                    Text('Ride Duration'),
-                    Text('Yeet'),
-                  ]
-              ),
-              //garage entries
-
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text('Contact Email: ttbh.group@gmail.com'),
             ]
         ),
       ),

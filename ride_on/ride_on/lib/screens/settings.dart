@@ -11,20 +11,13 @@ class SettingsRoute extends StatelessWidget {
       drawer: HamburgerMenu(),
       body: Center(
         child: Column(
-            children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                  children: <Widget>[
-                    Text('Ride Date'),
-                    Text('Toy Name'),
-                    Text('Ride Duration'),
-                    Text('Yeet'),
-                  ]
-              ),
-              //garage entries
-
-            ]
+          children: <Widget>[
+            Text('App Color: Based on my rides'),
+            Text('Some other setting'),
+            Text('Yeet'),
+          ]
         ),
       ),
     );
