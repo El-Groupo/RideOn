@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../hamburgerMenu.dart';
 
-class HistoryRoute extends StatelessWidget {
+class HelpRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History'),
+        title: Text('Help'),
       ),
       drawer: HamburgerMenu(),
       body: Center(

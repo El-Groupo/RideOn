@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/garage.dart';
-import 'screens/history.dart';
+//import 'screens/garage.dart';
+//import 'screens/history.dart';
+import 'hamburgerMenu.dart';
 
 void main() => runApp(MyApp());
 
@@ -74,62 +75,7 @@ String dropdownValue = 'name';
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text("userName"),
-              accountEmail: Text("userEmail@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? Colors.blue
-                        : Colors.white,
-                child: Text(
-                  "U",
-                  style: TextStyle(fontSize: 40.0),
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text("Home"),
-              onTap: () {
-
-                Navigator.pop(context);  //close drawer
-                //Navigator.of(context).push(MaterialPageRoute(
-                   // builder: (BuildContext context) => NewPage("Page two")));
-              },
-            ),
-            ListTile(
-              title: Text("Garage"),
-              onTap: () {
-                Navigator.pop(context);  //close drawer
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GarageRoute()),
-                );
-
-                //Navigator.of(context).push(MaterialPageRoute(
-                   // builder: (BuildContext context) => NewPage("Page two")));
-              },
-            ),
-            ListTile(
-              title: Text("History"),
-              onTap: () {
-                Navigator.pop(context);  //close drawer
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HistoryRoute()),
-                );
-
-                //Navigator.of(context).push(MaterialPageRoute(
-                // builder: (BuildContext context) => NewPage("Page two")));
-              },
-            ),
-          ]
-        ),
-      ),
-
+      drawer: HamburgerMenu(),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
