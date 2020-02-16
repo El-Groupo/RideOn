@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
 import '../hamburgerMenu.dart';
 
+
+TextStyle tableHeader()
+{
+  return TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    textBaseline: TextBaseline.alphabetic,
+  );
+}
+
+TextStyle tableData()
+{
+  return TextStyle(
+    fontSize: 12,
+    color: Colors.grey[600],
+  );
+}
+
 class HistoryRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,20 +29,73 @@ class HistoryRoute extends StatelessWidget {
       drawer: HamburgerMenu(),
       body: Center(
         child: Column(
-            children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                  children: <Widget>[
-                    Text('Ride Date'),
-                    Text('Toy Name'),
-                    Text('Ride Duration'),
-                    Text('Yeet'),
-                  ]
+          children: <Widget>[
+            Table(
+              border: TableBorder(
+                horizontalInside: BorderSide(),
+                verticalInside: BorderSide(),
               ),
-              //garage entries
-
-            ]
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              defaultColumnWidth: FlexColumnWidth(100),
+              children: <TableRow>[
+                TableRow(
+                  decoration: BoxDecoration(
+                    color: Colors.orange[400],
+//                    border: Border(
+//                      bottom: BorderSide(),
+//                      right: BorderSide(),
+//                    ),
+                  ),
+                  children: <Widget>[
+                    Text('\tRide Date',
+                        style: tableHeader(),
+                    ),
+                    Text('\tVehicle Name',
+                      style: tableHeader(),
+                    ),
+                    Text('\tRide Duration',
+                      style: tableHeader(),
+                    ),
+                    Text('\tYeet',
+                      style: tableHeader(),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <Widget>[
+                    Text('\tLike Yesterday',
+                        style: tableData(),
+                    ),
+                    Text('\tBig Red',
+                      style: tableData(),
+                    ),
+                    Text('\t45 seconds',
+                      style: tableData(),
+                    ),
+                    Text('\tyeet',
+                      style: tableData(),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: <Widget>[
+                    Text('\t27 BC',
+                      style: tableData(),
+                    ),
+                    Text('\tFlinstone Car',
+                      style: tableData(),
+                    ),
+                    Text('\t7 days',
+                      style: tableData(),
+                    ),
+                    Text('\tyaga',
+                      style: tableData(),
+                    ),
+                  ],
+                ),
+              ]
+            ),
+          ]
         ),
       ),
     );

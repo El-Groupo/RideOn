@@ -28,10 +28,8 @@ class HamburgerMenu extends StatelessWidget{
             ListTile(
               title: Text("Home"),
               onTap: () {
-
                 Navigator.pop(context);  //close drawer
-//Navigator.of(context).push(MaterialPageRoute(
-// builder: (BuildContext context) => NewPage("Page two")));
+                //Not sure how to get home
               },
             ),
             ListTile(

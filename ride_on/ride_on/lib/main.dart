@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sensors/sensors.dart';
 //import 'screens/garage.dart';
 //import 'screens/history.dart';
 import 'hamburgerMenu.dart';
@@ -47,22 +48,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
+  static bool _isRecording = false;
+  static double maxSpeed = 0.0;
+  void _toggleRecording() {
+    _isRecording = !_isRecording;
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
     });
   }
-String dropdownValue = 'name';
 
   @override
   Widget build(BuildContext context) {
+    userAccelerometerEvents.listen(
+            (UserAccelerometerEvent event){
+          maxSpeed = event.x + event.y + event.z;
+        }
+    );
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -96,18 +101,18 @@ String dropdownValue = 'name';
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text(
-                  'Current Toy',
+                  'Current Vehicle',
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     FloatingActionButton(
-                      onPressed: _incrementCounter,
-                      tooltip: 'Increment',
+                      onPressed: _toggleRecording,
+                      tooltip: 'Begin Recording',
                       //child: Icon(Icons.),
                     ),
                     Text(
-                      'Record',
+                      _isRecording ? 'Recording' : 'Record',
                     ),
                   ],
                 ),
@@ -117,6 +122,9 @@ String dropdownValue = 'name';
                   children: <Widget>[
                     Text(
                       'Top Speed',
+                    ),
+                    Text(
+                      maxSpeed.toString(),
                     ),
                     Text(
                       'Avg. Speed',
