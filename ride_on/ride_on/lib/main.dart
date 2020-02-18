@@ -106,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     FloatingActionButton(
                       onPressed: _toggleRecording,
@@ -113,7 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       //child: Icon(Icons.),
                     ),
                     Text(
-                      _isRecording ? 'Recording' : 'Record',
+                      _isRecording ? 'Recording\n'+'00:00' : 'Record',
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
