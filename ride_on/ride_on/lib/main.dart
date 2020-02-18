@@ -65,7 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     userAccelerometerEvents.listen(
             (UserAccelerometerEvent event){
-          maxSpeed = event.x + event.y + event.z;
+              double newSpeed = event.x + event.y + event.z;
+          maxSpeed = (newSpeed < maxSpeed) ? newSpeed : maxSpeed;
         }
     );
     // This method is rerun every time setState is called, for instance as done
@@ -124,10 +125,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Top Speed',
                     ),
                     Text(
-                      maxSpeed.toString(),
+                      maxSpeed.toStringAsFixed(1) + ' mph',
                     ),
                     Text(
                       'Avg. Speed',
+                    ),
+                    Text(
+                      '0.nothin',
                     ),
                   ]
                 )
