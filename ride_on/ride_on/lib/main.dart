@@ -60,12 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
   static double maxSpeed = 0.0;
   var location = new Location();
   static LocationData userLocation;
-  Timer _everySecond;
+  Timer _everySecond; //recording frequency timer
 
   void _toggleRecording() {
     setState(() {
-      _isRecording = !_isRecording;
-      if(!_isRecording) currRide = new RideObject();
+      if(!_isRecording) {
+        _isRecording = true;
+        currRide = new RideObject();
+        currRide.setDate(DateTime.now());
+      }
+      else if(_isRecording){
+        _isRecording = false;
+        //put it on the database
+      }
     });
   }
 
@@ -173,11 +180,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Top Speed\n' + currRide.maxSpeed.toStringAsFixed(1) + ' mph',
+                      'Top Speed\n' +
+                          (_isRecording ? currRide.maxSpeed.toStringAsFixed(1) : '0.0') +
+                          ' mph',
                         textAlign: TextAlign.center,
                     ),
                     Text(
-                      'Avg Speed\n' + currRide.getAvgSpeed().toStringAsFixed(1) + ' mph',
+                      'Avg Speed\n' +
+                          (_isRecording ? currRide.getAvgSpeed().toStringAsFixed(1) : '0.0') +
+                          ' mph',
                       textAlign: TextAlign.center,
                     ),
                   ]
