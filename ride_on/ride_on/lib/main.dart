@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:sensors/sensors.dart';
 import 'package:location/location.dart';
 //import 'screens/garage.dart';
@@ -53,20 +54,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   static bool _isRecording = false;
   static var currRide = new RideObject();
   static double maxSpeed = 0.0;
   var location = new Location();
-  LocationData userLocation;
+  static LocationData userLocation;
+  Timer _everySecond;
 
   void _toggleRecording() {
-    _isRecording = !_isRecording;
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+      _isRecording = !_isRecording;
+      if(!_isRecording) currRide = new RideObject();
     });
   }
 
@@ -82,6 +81,30 @@ class _MyHomePageState extends State<MyHomePage> {
     return currentLocation;
   }
 
+  void updateScreen() {
+    setState(() {
+      if(_isRecording) {
+        _getLocation().then((value) {
+          userLocation = value;
+        });
+        currRide.setMax(userLocation.speed);
+        currRide.incRideTime();
+        currRide.addPoint(
+            RideLocation(userLocation.latitude, userLocation.longitude));
+        currRide.addDistance(userLocation.speed);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // defines a timer
+    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if(_isRecording) updateScreen();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +155,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                     FloatingActionButton(
                       onPressed: () {
-                        _toggleRecording();
-                        _getLocation().then((value) {
-                          userLocation = value;
+                        setState(() {
+                          _toggleRecording();
                         });
-                        currRide.setMax(userLocation.speed);
                       },
                       tooltip: 'Begin Recording',
                       //child: Icon(Icons.),
@@ -156,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         textAlign: TextAlign.center,
                     ),
                     Text(
-                      'Avg Speed\n' + currRide.avgSpeed.toStringAsFixed(1) + ' mph',
+                      'Avg Speed\n' + currRide.getAvgSpeed().toStringAsFixed(1) + ' mph',
                       textAlign: TextAlign.center,
                     ),
                   ]
