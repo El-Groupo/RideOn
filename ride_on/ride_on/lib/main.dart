@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:sensors/sensors.dart';
+//import 'package:sensors/sensors.dart';
 import 'package:location/location.dart';
 //import 'screens/garage.dart';
 //import 'screens/history.dart';
