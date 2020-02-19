@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
+import 'package:location/location.dart';
 //import 'screens/garage.dart';
 //import 'screens/history.dart';
 import 'hamburgerMenu.dart';
+import 'objects/rideObject.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +36,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
+
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -49,7 +54,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static bool _isRecording = false;
+  static var currRide = new RideObject();
   static double maxSpeed = 0.0;
+  var location = new Location();
+  LocationData userLocation;
+
   void _toggleRecording() {
     _isRecording = !_isRecording;
     setState(() {
@@ -61,14 +70,27 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<LocationData> _getLocation() async {
+    LocationData currentLocation;
+    try {
+      currentLocation = await location.getLocation();
+    }
+    catch (e){
+      currentLocation = null;
+    }
+
+    return currentLocation;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    userAccelerometerEvents.listen(
-            (UserAccelerometerEvent event){
-              double newSpeed = event.x + event.y + event.z;
-          maxSpeed = (newSpeed < maxSpeed) ? newSpeed : maxSpeed;
-        }
-    );
+//    userAccelerometerEvents.listen(
+//            (UserAccelerometerEvent event){
+//              double newSpeed = event.x + event.y + event.z;
+//          maxSpeed = (newSpeed < maxSpeed) ? newSpeed : maxSpeed;
+//        }
+//    );
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -109,12 +131,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     FloatingActionButton(
-                      onPressed: _toggleRecording,
+                      onPressed: () {
+                        _toggleRecording();
+                        _getLocation().then((value) {
+                          userLocation = value;
+                        });
+                        currRide.setMax(userLocation.speed);
+                      },
                       tooltip: 'Begin Recording',
                       //child: Icon(Icons.),
                     ),
                     Text(
-                      _isRecording ? 'Recording\n'+'00:00' : 'Record',
+                      _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() : 'Record',
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -124,16 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Top Speed',
+                      'Top Speed\n' + currRide.maxSpeed.toStringAsFixed(1) + ' mph',
+                        textAlign: TextAlign.center,
                     ),
                     Text(
-                      maxSpeed.toStringAsFixed(1) + ' mph',
-                    ),
-                    Text(
-                      'Avg. Speed',
-                    ),
-                    Text(
-                      '0.nothin',
+                      'Avg Speed\n' + currRide.avgSpeed.toStringAsFixed(1) + ' mph',
+                      textAlign: TextAlign.center,
                     ),
                   ]
                 )
