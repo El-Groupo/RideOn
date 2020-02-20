@@ -170,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       //child: Icon(Icons.),
                     ),
                     Text(
-                      _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() : 'Record',
+                      _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() + 's' : 'Record',
                       textAlign: TextAlign.center,
                     ),
                   ],
