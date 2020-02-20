@@ -7,6 +7,8 @@ import 'package:location/location.dart';
 import 'hamburgerMenu.dart';
 import 'objects/rideObject.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'screens/history.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -57,7 +59,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   static bool _isRecording = false;
-  static var currRide = new RideObject();
+  static var currRide;// = new RideObject();
   static double maxSpeed = 0.0;
   var location = new Location();
   static LocationData userLocation;
@@ -69,9 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static Set<Polyline> _route;
-  void addPoint(LatLng pointIn)
+  void addRide(RideObject rideIn)
   {
-    _route.first.points.add(pointIn);
+    for(int i = 0; i < rideIn.rideRoute.length; i++) {
+      _route.first.points.add(rideIn.rideRoute[i]);
+    }
   }
 
   void _toggleRecording() {
@@ -83,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       else if(_isRecording){
         _isRecording = false;
+        HistoryRoute.saveRide(currRide);
         //put it on the database
       }
     });
@@ -109,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currRide.setMax(userLocation.speed);
         currRide.incRideTime();
         currRide.addPoint(
-            RideLocation(userLocation.latitude, userLocation.longitude));
+            LatLng(userLocation.latitude, userLocation.longitude));
         currRide.addDistance(userLocation.speed);
       }
     });
