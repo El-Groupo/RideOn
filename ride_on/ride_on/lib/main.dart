@@ -6,6 +6,7 @@ import 'package:location/location.dart';
 //import 'screens/history.dart';
 import 'hamburgerMenu.dart';
 import 'objects/rideObject.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -62,6 +63,17 @@ class _MyHomePageState extends State<MyHomePage> {
   static LocationData userLocation;
   Timer _everySecond; //recording frequency timer
 
+  GoogleMapController mapController;
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  static Set<Polyline> _route;
+  void addPoint(LatLng pointIn)
+  {
+    _route.first.points.add(pointIn);
+  }
+
   void _toggleRecording() {
     setState(() {
       if(!_isRecording) {
@@ -115,12 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-//    userAccelerometerEvents.listen(
-//            (UserAccelerometerEvent event){
-//              double newSpeed = event.x + event.y + event.z;
-//          maxSpeed = (newSpeed < maxSpeed) ? newSpeed : maxSpeed;
-//        }
-//    );
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -146,8 +152,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 500,                          //FIXME - Magic number
               ),
               decoration: BoxDecoration(color: Colors.blue[200]),
-              child: Text(
-                'Here will be the map',
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(45.521563, -122.677433),
+                  zoom: 11.0,
+                ),
+                polylines: _route,
               ),
             ),
             Row(
@@ -185,6 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ' mph',
                         textAlign: TextAlign.center,
                     ),
+
                     Text(
                       'Avg Speed\n' +
                           (_isRecording ? currRide.getAvgSpeed().toStringAsFixed(1) : '0.0') +
