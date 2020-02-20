@@ -169,8 +169,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
-                  'Current Vehicle',
+                Column(
+                  children: <Widget>[
+                    Text(
+                      'Current Speed',
+                    ),
+                    if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
+                  ]
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
