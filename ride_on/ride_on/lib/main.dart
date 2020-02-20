@@ -3,6 +3,7 @@ import 'package:sensors/sensors.dart';
 //import 'screens/garage.dart';
 //import 'screens/history.dart';
 import 'hamburgerMenu.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,8 +49,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  GoogleMapController mapController;
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  static Set<Polyline> _route;
+  void addPoint(LatLng pointIn)
+  {
+    _route.first.points.add(pointIn);
+  }
+
   static bool _isRecording = false;
-  static double maxSpeed = 0.0;
   void _toggleRecording() {
     _isRecording = !_isRecording;
     setState(() {
@@ -63,11 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    userAccelerometerEvents.listen(
-            (UserAccelerometerEvent event){
-          maxSpeed = event.x + event.y + event.z;
-        }
-    );
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -93,8 +100,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 500,                          //FIXME - Magic number
               ),
               decoration: BoxDecoration(color: Colors.blue[200]),
-              child: Text(
-                'Here will be the map',
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(45.521563, -122.677433),
+                  zoom: 11.0,
+                ),
+                polylines: _route,
               ),
             ),
             Row(
@@ -121,13 +133,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Top Speed',
+                      'Top Speed\n0.0',
                     ),
+
                     Text(
-                      maxSpeed.toString(),
-                    ),
-                    Text(
-                      'Avg. Speed',
+                      'Avg. Speed\n0.0',
                     ),
                   ]
                 )
