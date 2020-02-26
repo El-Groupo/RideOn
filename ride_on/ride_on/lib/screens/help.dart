@@ -14,7 +14,7 @@ class HelpRoute extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text('Contact Email: ttbh.group@gmail.com'),
+            Text('Contact Email: developer@tthbgroup.org'),
             ]
         ),
       ),

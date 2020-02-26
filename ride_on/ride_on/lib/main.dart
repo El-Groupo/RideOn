@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:sensors/sensors.dart';
-//import 'screens/garage.dart';
-//import 'screens/history.dart';
+import 'dart:async';
+import 'package:location/location.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'hamburgerMenu.dart';
+import 'objects/rideObject.dart';
+import 'screens/history.dart';
+
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +38,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
+
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -48,16 +55,76 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   static bool _isRecording = false;
+  static var currRide;// = new RideObject();
   static double maxSpeed = 0.0;
+  var location = new Location();
+  static LocationData userLocation;
+  Timer _everySecond; //recording frequency timer
+
+  GoogleMapController mapController;
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  static Set<Polyline> _route;
+  void addRide(RideObject rideIn)
+  {
+    for(int i = 0; i < rideIn.rideRoute.length; i++) {
+      _route.first.points.add(rideIn.rideRoute[i]);
+    }
+  }
+
   void _toggleRecording() {
-    _isRecording = !_isRecording;
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+      if(!_isRecording) {
+        _isRecording = true;
+        currRide = new RideObject();
+        currRide.setDate(DateTime.now());
+      }
+      else if(_isRecording){
+        _isRecording = false;
+        HistoryRoute.saveRide(currRide);
+        //put it on the database
+      }
+    });
+  }
+
+  Future<LocationData> _getLocation() async {
+    LocationData currentLocation;
+    try {
+      currentLocation = await location.getLocation();
+    }
+    catch (e){
+      currentLocation = null;
+    }
+
+    return currentLocation;
+  }
+
+  void updateScreen() {
+    setState(() {
+      if(_isRecording) {
+        _getLocation().then((value) {
+          userLocation = value;
+        });
+        currRide.setMax(userLocation.speed);
+        currRide.incRideTime();
+        currRide.addPoint(
+            LatLng(userLocation.latitude, userLocation.longitude));
+        currRide.addDistance(userLocation.speed);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // defines a timer
+    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if(_isRecording) updateScreen();
     });
   }
 
@@ -88,26 +155,42 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 500,                          //FIXME - Magic number
               ),
               decoration: BoxDecoration(color: Colors.blue[200]),
-              child: Text(
-                'Here will be the map',
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(45.521563, -122.677433),
+                  zoom: 11.0,
+                ),
+                polylines: _route,
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
-                  'Current Vehicle',
+                Column(
+                  children: <Widget>[
+                    Text(
+                      'Current Speed',
+                    ),
+                    if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
+                  ]
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     FloatingActionButton(
-                      onPressed: _toggleRecording,
+                      onPressed: () {
+                        setState(() {
+                          _toggleRecording();
+                        });
+                      },
                       tooltip: 'Begin Recording',
                       //child: Icon(Icons.),
                     ),
                     Text(
-                      _isRecording ? 'Recording' : 'Record',
+                      _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() + 's' : 'Record',
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -116,13 +199,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Top Speed',
+                      'Top Speed\n' +
+                          (_isRecording ? currRide.maxSpeed.toStringAsFixed(1) : '0.0') +
+                          ' mph',
+                        textAlign: TextAlign.center,
                     ),
+
                     Text(
-                      maxSpeed.toString(),
-                    ),
-                    Text(
-                      'Avg. Speed',
+                      'Avg Speed\n' +
+                          (_isRecording ? currRide.getAvgSpeed().toStringAsFixed(1) : '0.0') +
+                          ' mph',
+                      textAlign: TextAlign.center,
                     ),
                   ]
                 )
