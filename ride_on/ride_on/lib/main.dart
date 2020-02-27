@@ -68,12 +68,40 @@ class _MyHomePageState extends State<MyHomePage> {
     mapController = controller;
   }
 
-  static Set<Polyline> _route;
+  static Set<Polyline> _routes = new Set<Polyline>();
+  static int num = 0;
+
   void addRide(RideObject rideIn)
   {
+    num+= 10;
+    var latlngList = List<LatLng>();
+
+//    for(int i = 0; i < 100; i++)
+//      {
+//        latlngList.add(LatLng(40.2444845 + (i)/10000, -111.6474918 + (i+2*num)*(i+num)/1000000));
+//      }
+
     for(int i = 0; i < rideIn.rideRoute.length; i++) {
-      _route.first.points.add(rideIn.rideRoute[i]);
+      latlngList.add(rideIn.rideRoute[i]);
     }
+
+    var tempLine= new Polyline(
+        polylineId: PolylineId('steven' + num.toString()),
+        points:latlngList,
+        color: Colors.blue,//[(100 + num * 10) % 500],  //for some reason, this gives an error after a few seconds
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        jointType: JointType.round,
+        width: 5
+    );
+
+
+    Set<Polyline> tempSet = Set<Polyline>();
+    tempSet.add(tempLine);
+
+//    _route = tempSet;
+    _routes = _routes.union(tempSet);
+
   }
 
   void _toggleRecording() {
@@ -86,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
       else if(_isRecording){
         _isRecording = false;
         HistoryRoute.saveRide(currRide);
+        addRide(currRide);
         //put it on the database
       }
     });
@@ -157,11 +186,12 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: BoxDecoration(color: Colors.blue[200]),
               child: GoogleMap(
                 onMapCreated: _onMapCreated,
+                mapType: MapType.hybrid,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(45.521563, -122.677433),
                   zoom: 11.0,
                 ),
-                polylines: _route,
+                polylines: _routes,
               ),
             ),
             Row(
@@ -172,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text(
                       'Current Speed',
                     ),
-                    if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
+                    //if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
                   ]
                 ),
                 Column(
