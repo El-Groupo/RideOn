@@ -91,10 +91,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<LocationData> _getLocation() async {
+  Future<LocationData> _getLocation(Stream<LocationData> stream) async {
     LocationData currentLocation;
     try {
-      currentLocation = await location.getLocation();
+      await for(LocationData value in stream)
+        {
+          currentLocation = value;
+          //location.getLocation();
+        }
     }
     catch (e){
       currentLocation = null;
@@ -106,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void updateScreen() {
     setState(() {
       if(_isRecording) {
-        _getLocation().then((value) {
+        _getLocation(location.onLocationChanged()).then((value) {
           userLocation = value;
         });
         currRide.setMax(userLocation.speed);
