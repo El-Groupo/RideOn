@@ -95,11 +95,15 @@ class _MyHomePageState extends State<MyHomePage> {
         width: 5
     );
 
-
     Set<Polyline> tempSet = Set<Polyline>();
     tempSet.add(tempLine);
 
-//    _route = tempSet;
+//    if(_routes.isNotEmpty) {
+//      tempSet.add(_routes.last.copyWith(
+//          colorParam: Colors.blue)); //add it to the temp set with final color
+//      _routes.remove(_routes.last);
+//      _routes.
+//    }
     _routes = _routes.union(tempSet);
 
   }
@@ -108,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       if(!_isRecording) {
         _isRecording = true;
+        location = new Location();
         currRide = new RideObject();
         currRide.setDate(DateTime.now());
       }
@@ -121,20 +126,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _getLocation(Stream<LocationData> stream) async {
-    LocationData currentLocation;
     try {
       await for(LocationData value in stream)
         {
-          currentLocation = value;
-          currRide.setMax(currentLocation.speed);
+          currRide.setMax(value.speed);
           currRide.addPoint(
-              LatLng(currentLocation.latitude, currentLocation.longitude));
-          userLocation = currentLocation;
+              LatLng(value.latitude, value.longitude));
+          userLocation = value;
           //location.getLocation();
         }
     }
     catch (e){
-      currentLocation = null;
+//      userLocation = null;
     }
 
     //return currentLocation;
@@ -170,6 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     //_getCurrLocation();
+
 
     // defines a timer
     _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
@@ -223,9 +227,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 Column(
                   children: <Widget>[
                     Text(
-                      'Current Speed\n',
+                      'Current Speed\n' +
+                          ((userLocation != null && _isRecording) ?
+                          mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph' : ''
+                          ),
                     ),
-                    //if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
+//                    if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
                   ]
                 ),
                 Column(
@@ -253,14 +260,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                     Text(
                       'Top Speed\n' +
-                          (_isRecording ? currRide.maxSpeed.toStringAsFixed(1) : '0.0') +
+                          (_isRecording ? currRide.maxSpeed.toStringAsFixed(1) : '--') +
                           ' mph',
                         textAlign: TextAlign.center,
                     ),
 
                     Text(
                       'Avg Speed\n' +
-                          (_isRecording ? currRide.getAvgSpeed().toStringAsFixed(1) : '0.0') +
+                          (_isRecording ? currRide.getAvgSpeed().toStringAsFixed(1) : '--') +
                           ' mph',
                       textAlign: TextAlign.center,
                     ),
