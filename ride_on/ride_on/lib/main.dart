@@ -91,12 +91,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<LocationData> _getLocation(Stream<LocationData> stream) async {
+  void _getLocation(Stream<LocationData> stream) async {
     LocationData currentLocation;
     try {
       await for(LocationData value in stream)
         {
           currentLocation = value;
+          currRide.setMax(currentLocation.speed);
+          currRide.addPoint(
+              LatLng(currentLocation.latitude, currentLocation.longitude));
+          userLocation = currentLocation;
           //location.getLocation();
         }
     }
@@ -104,19 +108,17 @@ class _MyHomePageState extends State<MyHomePage> {
       currentLocation = null;
     }
 
-    return currentLocation;
+    //return currentLocation;
   }
 
   void updateScreen() {
     setState(() {
       if(_isRecording) {
-        _getLocation(location.onLocationChanged()).then((value) {
-          userLocation = value;
-        });
-        currRide.setMax(userLocation.speed);
+        _getLocation(location.onLocationChanged());
+        //.then(() {
+          //userLocation = value;
+        //});
         currRide.incRideTime();
-        currRide.addPoint(
-            LatLng(userLocation.latitude, userLocation.longitude));
         currRide.addDistance(userLocation.speed);
       }
     });
