@@ -140,6 +140,18 @@ class _MyHomePageState extends State<MyHomePage> {
     //return currentLocation;
   }
 
+  void _getCurrLocation() async {
+    //LocationData currentLocation;
+    try {
+      userLocation = await location.getLocation();
+    }
+    catch (e){
+      userLocation = null;
+    }
+
+    //return currentLocation;
+  }
+
   void updateScreen() {
     setState(() {
       if(_isRecording) {
@@ -156,6 +168,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    //_getCurrLocation();
 
     // defines a timer
     _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
@@ -194,7 +208,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 onMapCreated: _onMapCreated,
                 mapType: MapType.hybrid,
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(45.521563, -122.677433),
+                  target: LatLng(40.2463985, -111.6541483),
+//                      (userLocation == null ? 40.2463985 : userLocation.latitude),
+//                      (userLocation == null ? -111.6541483 : userLocation.longitude)
+
                   zoom: 11.0,
                 ),
                 polylines: _routes,
@@ -206,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Column(
                   children: <Widget>[
                     Text(
-                      'Current Speed',
+                      'Current Speed\n',
                     ),
                     //if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
                   ]
