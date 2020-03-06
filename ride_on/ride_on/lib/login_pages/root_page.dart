@@ -100,6 +100,7 @@ class _RoodPageState extends State<RootPage>
         if (_userId.length > 0 && _userId != null)
         {
           return new MyHomePage(
+            title: "RideOn Home",
             userId: _userId,
             auth: widget.auth,
             logoutCallback: logoutCallback,

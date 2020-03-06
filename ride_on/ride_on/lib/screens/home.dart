@@ -16,9 +16,9 @@ import 'history.dart';
 
 class MyHomePage extends StatefulWidget
 {
-  MyHomePage({Key key, this.title, this.app, this.auth, this.userId, this.logoutCallback}) : super(key: key);
-  final FirebaseApp app;
+  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key);
   final String title;
+  //final FirebaseApp app;
   final BaseAuth auth;
   final VoidCallback logoutCallback;
   final String userId;
