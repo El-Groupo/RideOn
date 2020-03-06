@@ -20,10 +20,10 @@ class RootPage extends StatefulWidget
   final BaseAuth auth;
 
   @override
-  State<StatefulWidget> createState() => new _RoodPageState();
+  State<StatefulWidget> createState() => new _RootPageState();
 }
 
-class _RoodPageState extends State<RootPage>
+class _RootPageState extends State<RootPage>
 {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINDED;
   String _userId = "";
@@ -100,7 +100,7 @@ class _RoodPageState extends State<RootPage>
         if (_userId.length > 0 && _userId != null)
         {
           return new MyHomePage(
-            title: "RideOn Home",
+            title: 'RideOn',
             userId: _userId,
             auth: widget.auth,
             logoutCallback: logoutCallback,
