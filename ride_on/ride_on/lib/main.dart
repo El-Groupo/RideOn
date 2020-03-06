@@ -6,7 +6,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ride_on/services/authentication.dart';
 
+import 'login_pages/root_page.dart';
 import 'screens/home.dart';
 
 Future<void> main() async {
@@ -25,8 +27,19 @@ Future<void> main() async {
       databaseURL: 'https://flutterfire-cd2f7.firebaseio.com',
     ),
   );
-  runApp(MaterialApp(
-    title: 'Flutter Database Example',
-    home: MyHomePage(app: app, title: 'RideOnHomePage'),
-  ));
+  runApp(new MyApp());
+}
+
+class MyApp extends StatelessWidget
+{
+  @override
+  Widget build(BuildContext context)
+  {
+    return new MaterialApp(
+      title: 'RideOn',
+      theme: new ThemeData(
+        primarySwatch: Colors.lightGreen,
+      ),
+      home: new RootPage(auth: new Auth()));
+  }
 }
