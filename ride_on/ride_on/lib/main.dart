@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:ride_on/login_pages/root_page.dart';
 import 'package:ride_on/services/authentication.dart';
 
+import 'login_pages/root_page.dart';
 import 'screens/home.dart';
 
 Future<void> main() async {
