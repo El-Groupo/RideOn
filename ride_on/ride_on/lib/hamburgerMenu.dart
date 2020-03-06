@@ -6,21 +6,25 @@ import 'screens/settings.dart';
 import 'screens/help.dart';
 
 class HamburgerMenu extends StatelessWidget{
+  HamburgerMenu({this.userName, this.userEmail});
+
+  final String userName, userEmail;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("userName"),
-            accountEmail: Text("userEmail@gmail.com"),
+            accountName: Text(userName),
+            accountEmail: Text(userEmail),
             currentAccountPicture: CircleAvatar(
               backgroundColor:
               Theme.of(context).platform == TargetPlatform.iOS
                   ? Colors.blue
                   : Colors.white,
               child: Text(
-                "U",
+                userEmail.substring(0, 1),
                 style: TextStyle(fontSize: 40.0),
               ),
             ),

@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../login_pages/login_signup_page.dart';
 import '../login_pages/root_page.dart';
@@ -16,22 +17,30 @@ import 'history.dart';
 
 class MyHomePage extends StatefulWidget
 {
-  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key);
+
+  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key)
+  {
+    user = auth.getCurrentUser();
+  }
+
   final String title;
   //final FirebaseApp app;
   final BaseAuth auth;
   final VoidCallback logoutCallback;
   final String userId;
+  static var user;
 
   //@override
   //_MyHomePageState createState() => _MyHomePageState();
   @override
-  State<StatefulWidget> createState() => new _MyHomePageState();
+  State<StatefulWidget> createState() => new _MyHomePageState(user: user);
 }
 
 class _MyHomePageState extends State<MyHomePage>
 {
+  _MyHomePageState({this.user});
 
+  final FirebaseUser user;
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   //final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -181,7 +190,17 @@ class _MyHomePageState extends State<MyHomePage>
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: HamburgerMenu(),
+      drawer: FutureBuilder(
+        future: FirebaseAuth.instance.currentUser(),
+        builder: (context, AsyncSnapshot<FirebaseUser> user) {
+          if (user.hasData) {
+            return HamburgerMenu(userName: user.data.displayName, userEmail: user.data.email,);
+          }
+          else {
+            return Text('Loading...');
+          }
+        },
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -196,11 +215,12 @@ class _MyHomePageState extends State<MyHomePage>
                 onMapCreated: _onMapCreated,
                 mapType: MapType.hybrid,
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(40.2463985, -111.6541483),
+                  target: //LatLng(userLocation.latitude, userLocation.longitude),
+                        LatLng(40.2463985, -111.6541483),
 //                      (userLocation == null ? 40.2463985 : userLocation.latitude),         FIXED??
 //                      (userLocation == null ? -111.6541483 : userLocation.longitude)       FIXED??
 
-                  zoom: 11.0,
+                  zoom: 17.0,
                 ),
                 polylines: _routes,
               ),
