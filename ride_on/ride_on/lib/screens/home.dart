@@ -18,22 +18,15 @@ import 'history.dart';
 class MyHomePage extends StatefulWidget
 {
 
-  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key)
-  {
-    user = auth.getCurrentUser();
-  }
+  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key);
 
   final String title;
-  //final FirebaseApp app;
   final BaseAuth auth;
   final VoidCallback logoutCallback;
   final String userId;
-  static var user;
 
-  //@override
-  //_MyHomePageState createState() => _MyHomePageState();
   @override
-  State<StatefulWidget> createState() => new _MyHomePageState(user: user);
+  State<StatefulWidget> createState() => new _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage>
@@ -137,19 +130,20 @@ class _MyHomePageState extends State<MyHomePage>
     //return currentLocation;
   }
 
-  void _getCurrLocation() async
+  Future<LocationData> _getCurrLocation() async
   {
-    //LocationData currentLocation;
+    LocationData currentLocation;
+
     try
     {
-      userLocation = await location.getLocation();
+      currentLocation = await location.getLocation();
     }
     catch (e)
     {
-      userLocation = null;
+      currentLocation = null;
     }
 
-    //return currentLocation;
+    return currentLocation;
   }
 
   void updateScreen()
@@ -177,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage>
 
 
     // defines a timer
-    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t)
+    /*_everySecond = */Timer.periodic(Duration(seconds: 1), (Timer t)
     {
       if(_isRecording) updateScreen();
     });
@@ -194,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage>
         future: FirebaseAuth.instance.currentUser(),
         builder: (context, AsyncSnapshot<FirebaseUser> user) {
           if (user.hasData) {
-            return HamburgerMenu(userName: user.data.displayName, userEmail: user.data.email,);
+            return HamburgerMenu.setUser(user.data.displayName, user.data.email);
           }
           else {
             return Text('Loading...');
@@ -211,18 +205,30 @@ class _MyHomePageState extends State<MyHomePage>
                 height: 500,                          //FIXME - Magic number
               ),
               decoration: BoxDecoration(color: Colors.blue[200]),
-              child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                mapType: MapType.hybrid,
-                initialCameraPosition: CameraPosition(
-                  target: //LatLng(userLocation.latitude, userLocation.longitude),
-                        LatLng(40.2463985, -111.6541483),
+              child: FutureBuilder(
+                future: _getCurrLocation(),
+                builder: (context, AsyncSnapshot<LocationData> currLoc) {
+                  var displayLoc;
+                  if (currLoc.hasData) {
+                    displayLoc = LatLng(currLoc.data.latitude, currLoc.data.longitude);
+                  }
+                  else {
+                    displayLoc = LatLng(40.2463985, -111.6541483);
+                  }
+                  return GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    mapType: MapType.hybrid,
+                    initialCameraPosition: CameraPosition(
+                      target: displayLoc,
+                      //LatLng(40.2463985, -111.6541483),
 //                      (userLocation == null ? 40.2463985 : userLocation.latitude),         FIXED??
 //                      (userLocation == null ? -111.6541483 : userLocation.longitude)       FIXED??
 
-                  zoom: 17.0,
-                ),
-                polylines: _routes,
+                      zoom: 17.0,
+                    ),
+                    polylines: _routes,
+                  );
+                },
               ),
             ),
             Row(

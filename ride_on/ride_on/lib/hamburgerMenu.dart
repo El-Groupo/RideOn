@@ -6,9 +6,15 @@ import 'screens/settings.dart';
 import 'screens/help.dart';
 
 class HamburgerMenu extends StatelessWidget{
-  HamburgerMenu({this.userName, this.userEmail});
+  HamburgerMenu();
 
-  final String userName, userEmail;
+  HamburgerMenu.setUser(userNameIn, userEmailIn)
+  {
+    userName = userNameIn;
+    userEmail = userEmailIn;
+  }
+
+  static String userName, userEmail;
 
   @override
   Widget build(BuildContext context) {
