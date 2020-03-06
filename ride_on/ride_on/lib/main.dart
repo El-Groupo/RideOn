@@ -1,43 +1,66 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'hamburgerMenu.dart';
 import 'objects/rideObject.dart';
 import 'screens/history.dart';
 
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'RideOn',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.orange,
-      ),
-      home: MyHomePage(title: 'RideOn Home Page'),
-    );
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final FirebaseApp app = await FirebaseApp.configure(
+    name: 'db2',
+    options: Platform.isIOS
+        ? const FirebaseOptions(
+      googleAppID: '1:297855924061:ios:c6de2b69b03a5be8',
+      gcmSenderID: '297855924061',
+      databaseURL: 'https://flutterfire-cd2f7.firebaseio.com',
+    )
+        : const FirebaseOptions(
+      googleAppID: '1:297855924061:android:669871c998cc21bd',
+      apiKey: 'AIzaSyD_shO5mfO9lhy2TVWhfo1VUmARKlG4suk',
+      databaseURL: 'https://flutterfire-cd2f7.firebaseio.com',
+    ),
+  );
+  runApp(MaterialApp(
+    title: 'Flutter Database Example',
+    home: MyHomePage(app: app, title: 'RideOnHomePage'),
+  ));
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+//class MyApp extends StatelessWidget {
+//  // This widget is the root of your application.
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      title: 'RideOn',
+//      theme: ThemeData(
+//        // This is the theme of your application.
+//        //
+//        // Try running your application with "flutter run". You'll see the
+//        // application has a blue toolbar. Then, without quitting the app, try
+//        // changing the primarySwatch below to Colors.green and then invoke
+//        // "hot reload" (press "r" in the console where you ran "flutter run",
+//        // or simply save your changes to "hot reload" in a Flutter IDE).
+//        // Notice that the counter didn't reset back to zero; the application
+//        // is not restarted.
+//        primarySwatch: Colors.orange,
+//      ),
+//      home: MyHomePage(title: 'RideOn Home Page'),
+//    );
+//  }
+//}
 
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title, this.app}) : super(key: key);
+  final FirebaseApp app;
+  final String title;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -47,8 +70,6 @@ class MyHomePage extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
-  final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
