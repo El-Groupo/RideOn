@@ -14,6 +14,7 @@ class LoginSignupPage extends StatefulWidget {
 class _LoginSignupPageState extends State<LoginSignupPage> {
   final _formKey = new GlobalKey<FormState>();
 
+  String _name;
   String _email;
   String _password;
   String _errorMessage;
@@ -143,11 +144,12 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             shrinkWrap: true,
             children: <Widget>[
               showLogo(),
+              showErrorMessage(),
+              showUserNameInput(),
               showEmailInput(),
               showPasswordInput(),
               showPrimaryButton(),
               showSecondaryButton(),
-              showErrorMessage(),
             ],
           ),
         ));
@@ -155,14 +157,23 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   Widget showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
+      return Padding(
+        padding:  const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+        child: new Text(
+          _errorMessage,
+          style: TextStyle(
+            fontSize: 13.0,
+            color: Colors.red,)
+        ),
+    );
+      /*return new Text(
         _errorMessage,
         style: TextStyle(
             fontSize: 13.0,
             color: Colors.red,
             height: 1.0,
             fontWeight: FontWeight.w300),
-      );
+      );*/
     } else {
       return new Container(
         height: 0.0,
@@ -174,19 +185,38 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     return new Hero(
       tag: 'hero',
       child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
+        padding: EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          radius: 48.0,
+          radius: 100.0,
           child: Image.asset('lib/media/images/MotorbikePNG.png'),
         ),
       ),
     );
   }
 
+  Widget showUserNameInput() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: new TextFormField(
+        maxLines: 1,
+        keyboardType: TextInputType.text,
+        autofocus: false,
+        decoration: new InputDecoration(
+            hintText: 'Name',
+            icon: new Icon(
+              Icons.account_box,
+              color: Colors.grey,
+            )),
+        validator: (value) => value.isEmpty ? 'Name can\'t be empty' : null,
+        onSaved: (value) => _email = value.trim(),
+      ),
+    );
+  }
+
   Widget showEmailInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
@@ -198,7 +228,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
               color: Colors.grey,
             )),
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-        onSaved: (value) => _email = value.trim(),
+        onSaved: (value) => _name = value.trim(),
       ),
     );
   }

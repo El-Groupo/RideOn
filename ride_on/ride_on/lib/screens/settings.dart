@@ -16,23 +16,23 @@ class SettingsRoute extends StatelessWidget {
       ),
       drawer: HamburgerMenu(),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text('App Color: Based on my rides'),
-            Text('Some other setting'),
-            Text('Logout'),
-//            FlatButton(
-//              padding: EdgeInsets.all(0),
-//              onPressed: new RootPage(auth: new Auth());
-//              onPressed: ()
-//                {
-//                  Navigator.push(context,
-//                      MaterialPageRoute(builder: (context) => LoginSignupPage()));
-//                },
-//            ),
-          ],
-        )
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text('App Color: Based on my rides'),
+              Text('Some other setting'),
+              Text('Logout'),
+              /*FlatButton(
+                padding: EdgeInsets.all(0),
+                //onPressed: new RootPage(auth: new Auth());
+                onPressed: ()
+                {
+                  Navigator.push(context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginSignupPage()));
+                }),*/
+            ],
+          )
       ),
     );
   }

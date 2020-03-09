@@ -30,7 +30,7 @@ class HamburgerMenu extends StatelessWidget{
                   ? Colors.blue
                   : Colors.white,
               child: Text(
-                userEmail.substring(0, 1),
+                userName.substring(0, 1),
                 style: TextStyle(fontSize: 40.0),
               ),
             ),
