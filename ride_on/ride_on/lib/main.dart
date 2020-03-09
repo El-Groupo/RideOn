@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'RideOn',
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.orange,
         ),
         home: new RootPage(auth: new Auth()));
   }
