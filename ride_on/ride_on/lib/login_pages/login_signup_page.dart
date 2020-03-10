@@ -209,7 +209,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
               color: Colors.grey,
             )),
         validator: (value) => value.isEmpty ? 'Name can\'t be empty' : null,
-        onSaved: (value) => _email = value.trim(),
+        onSaved: (value) => _name = value.trim(),
       ),
     );
   }
@@ -228,7 +228,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
               color: Colors.grey,
             )),
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-        onSaved: (value) => _name = value.trim(),
+        onSaved: (value) => _email = value.trim(),
       ),
     );
   }

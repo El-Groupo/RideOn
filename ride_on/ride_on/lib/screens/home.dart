@@ -162,6 +162,15 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState()
   {
@@ -183,6 +192,12 @@ class _MyHomePageState extends State<MyHomePage>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          new FlatButton(
+              child: new Text('Logout',
+                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+              onPressed: signOut)
+        ],
       ),
       drawer: FutureBuilder(
         future: FirebaseAuth.instance.currentUser(),

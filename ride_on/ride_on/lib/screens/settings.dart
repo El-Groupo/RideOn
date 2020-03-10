@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../hamburgerMenu.dart';
 import '../login_pages/login_signup_page.dart';
@@ -5,7 +6,25 @@ import '../login_pages/root_page.dart';
 import 'home.dart';
 import '../services/authentication.dart';
 
-class SettingsRoute extends StatelessWidget {
+class SettingsRoute extends StatefulWidget {
+
+  SettingsRoute(
+      {Key key, this.title, this.auth, this.userId, this.logoutCallback})
+      : super(key: key);
+  final String title;
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
+
+  @override
+  State<StatefulWidget> createState() => new _SettingsRouteState();
+
+}
+
+class _SettingsRouteState extends State<SettingsRoute>
+{
+  _SettingsRouteState({this.user});
+  final FirebaseUser user;
 
 
   @override
@@ -19,21 +38,38 @@ class SettingsRoute extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('App Color: Based on my rides'),
-              Text('Some other setting'),
-              Text('Logout'),
-              /*FlatButton(
-                padding: EdgeInsets.all(0),
-                //onPressed: new RootPage(auth: new Auth());
-                onPressed: ()
+              ListTile(
+                title: Text("App Color: based on my rides"),
+                onTap:()
                 {
-                  Navigator.push(context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginSignupPage()));
-                }),*/
+
+                },
+              ),
+              ListTile(
+                title: Text('App Color: Based on my rides'),
+              ),
+              ListTile(
+                title: Text('Some other setting'),
+              ),
+              ListTile(
+                title: Text('Logout'),
+                onTap: ()
+                {
+                  signOut();
+                },
+              ),
             ],
           )
       ),
     );
+  }
+
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
   }
 }
