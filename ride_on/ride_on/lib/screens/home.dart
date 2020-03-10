@@ -35,13 +35,15 @@ class _MyHomePageState extends State<MyHomePage>
 
   final FirebaseUser user;
   final FirebaseDatabase _database = FirebaseDatabase.instance;
-  //final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  DatabaseReference itemRef;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   static bool _isRecording = false;
   static var currRide;// = new RideObject();
   static double maxSpeed = 0.0;
   var location = new Location();
   static LocationData userLocation;
+  static String myToy = "big red";
   Timer _everySecond; //recording frequency timer
 
   GoogleMapController mapController;
@@ -89,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage>
 //    }
     _routes = _routes.union(tempSet);
 
+   // _database.reference().child("Ride").push().set(rideIn.toJson());
   }
 
   void _toggleRecording()
@@ -101,11 +104,14 @@ class _MyHomePageState extends State<MyHomePage>
         location = new Location();
         currRide = new RideObject();
         currRide.setDate(DateTime.now());
+        currRide.setName(myToy);
       }
       else if(_isRecording){
         _isRecording = false;
-        HistoryRoute.saveRide(currRide);
+        //HistoryRoute.saveRide(currRide);
         addRide(currRide);
+        _database.reference().child("Ride").push().set(currRide.toJson());
+        //handleSubmit();
         //put it on the database
       }
     });
@@ -171,10 +177,25 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
+  /*
+  void handleSubmit()
+  {
+    final FormState form = formKey.currentState;
+    if (form.validate())
+      {
+        form.save();
+        form.reset();
+        itemRef.push().set(currRide.toJson());
+      }
+  }
+
+   */
+
   @override
   void initState()
   {
     super.initState();
+    itemRef = FirebaseDatabase.instance.reference().child('Rides');
 
     //_getCurrLocation();
 
