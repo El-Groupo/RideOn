@@ -13,6 +13,7 @@ import '../login_pages/root_page.dart';
 import '../services/authentication.dart';
 import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
+import '../singleton.dart';
 import 'history.dart';
 
 class MyHomePage extends StatefulWidget
@@ -31,11 +32,12 @@ class MyHomePage extends StatefulWidget
 
 class _MyHomePageState extends State<MyHomePage>
 {
+  var mySingleton = Singleton();
   _MyHomePageState({this.user});
 
   final FirebaseUser user;
-  final FirebaseDatabase _database = FirebaseDatabase.instance;
-  DatabaseReference itemRef;
+  //final FirebaseDatabase _database = FirebaseDatabase.instance;
+  final DatabaseReference rideData = FirebaseDatabase.instance.reference().child("ride");
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   static bool _isRecording = false;
@@ -54,6 +56,25 @@ class _MyHomePageState extends State<MyHomePage>
 
   static Set<Polyline> _routes = new Set<Polyline>();
   static int num = 0;
+
+  saveData()
+  {
+    rideData.push().set({
+      'userId': 'currRide.getUserID()',
+      'maxSpeed': currRide.maxSpeed,
+      'rideLength': currRide.rideLength,
+      'rideTimeSec': currRide.rideTimeSec,
+      'rideRoute': currRide.rideRoute,
+      'rideDate': currRide.rideDate,
+      'vehiclename': currRide.vehicleName,
+    });
+  }
+
+  void grabData()
+  {
+    Query rideQuery = rideData.orderByChild("userId").equalTo(widget.userId);
+    //rideQuery.
+  }
 
   void addRide(RideObject rideIn)
   {
@@ -91,7 +112,8 @@ class _MyHomePageState extends State<MyHomePage>
 //    }
     _routes = _routes.union(tempSet);
 
-   // _database.reference().child("Ride").push().set(rideIn.toJson());
+   rideData.push().set(currRide.toJson());
+    mySingleton.addRide(currRide);
   }
 
   void _toggleRecording()
@@ -105,12 +127,14 @@ class _MyHomePageState extends State<MyHomePage>
         currRide = new RideObject();
         currRide.setDate(DateTime.now());
         currRide.setName(myToy);
+        currRide.setUserID(widget.userId);
       }
       else if(_isRecording){
         _isRecording = false;
         //HistoryRoute.saveRide(currRide);
         addRide(currRide);
-        _database.reference().child("Ride").push().set(currRide.toJson());
+        //saveData();
+        //_database.reference().child("Ride").push().set(currRide.toJson());
         //handleSubmit();
         //put it on the database
       }
@@ -195,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage>
   void initState()
   {
     super.initState();
-    itemRef = FirebaseDatabase.instance.reference().child('Rides');
+    //itemRef = FirebaseDatabase.instance.reference().child('Rides');
 
     //_getCurrLocation();
 

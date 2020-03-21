@@ -21,8 +21,9 @@ class RideObject
   double maxSpeed = 0.0;  //in mph
   double rideLength = 0.0;  //in meters
   int rideTimeSec = 0;  //in seconds
-  var rideRoute = new List<LatLng>();
+  List rideRoute = new List<LatLng>();
   String vehicleName;
+  List test = new List<LatLng>();
 
   //other info
     //vehicle
@@ -36,6 +37,14 @@ class RideObject
   double getAvgSpeed() { return mpsTomph(rideLength / rideTimeSec);}
   void setDate(DateTime dateIn) { rideDate = dateIn; }
   void setName(String name) { vehicleName = name; }
+  void setUserID(String userID) {this.userId = userID;}
+
+  String getUserID() {return userId;}
+  double getRideLength() {return rideLength;}
+  double getMaxSpeed() {return maxSpeed;}
+  int getRideTime() {return rideTimeSec;}
+  List getRideRoute() {return rideRoute;}
+  String getVehicleName() {return vehicleName;}
 
   RideObject();
   //RideObject(this.maxSpeed, this.userId, this.rideLength, this.rideTimeSec, this.rideRoute, this.rideDate, this.vehicleName);
@@ -51,13 +60,20 @@ class RideObject
         vehicleName = snapshot.value["vehicleName"];
 
   toJson() {
+    List myRoute = new List<double>();
+    for (LatLng coordinates in rideRoute)
+    {
+      myRoute.add(coordinates.latitude);
+      myRoute.add(coordinates.longitude);
+    }
+
     return {
       "userId": userId,
       "maxSpeed": maxSpeed,
       "rideLength": rideLength,
       "rideTimeSec": rideTimeSec,
-      "rideRoute": rideRoute,
-      "rideDate": rideDate,
+      "rideRoute": myRoute,
+      "rideDate": rideDate.toString(),
       "vehiclename": vehicleName,
     };
   }

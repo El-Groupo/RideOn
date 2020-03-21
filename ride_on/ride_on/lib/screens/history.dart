@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:ride_on/singleton.dart';
 import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
 import '../objects/rideObject.dart';
@@ -44,13 +45,8 @@ class HistoryRoute extends StatefulWidget
 
 class _HistoryRouteState extends State<HistoryRoute>
 {
+  var mySingleton = Singleton();
   List<RideObject> rideHistory = List();
-  var newRideHistory = List<RideObject>();
-
-  void saveRide(RideObject newRide)
-  {
-    newRideHistory.add(newRide);
-  }
 
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -63,13 +59,16 @@ class _HistoryRouteState extends State<HistoryRoute>
   void initState()
   {
     super.initState();
-    rideHistory = new List();
+    rideHistory = mySingleton.getRides();
+    /*
     rideQuery = _database.reference().child("Ride")
         .orderByChild("AssociatedUsername")
         .equalTo(widget.userId);
     _onRideAddedSubscription = rideQuery.onChildAdded.listen(onEntryAdded);
     _onRideChangedSubscription =
         rideQuery.onChildAdded.listen(onEntryChanged);
+
+     */
   }
 
   onEntryAdded(Event event) {
