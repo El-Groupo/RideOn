@@ -28,8 +28,9 @@ class HamburgerMenu extends StatelessWidget{
           ListTile(
             title: Text("Home"),
             onTap: () {
-              Navigator.pop(context);  //close drawer
-              //Not sure how to get home
+              while(Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
             },
           ),
           ListTile(
