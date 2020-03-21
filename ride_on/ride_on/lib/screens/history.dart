@@ -176,6 +176,7 @@ class _HistoryRouteState extends State<HistoryRoute>
                 onPressed: signOut)
           ],
         ),
+        drawer: HamburgerMenu(),
         body: showRideList(),
     );
 
