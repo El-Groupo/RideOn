@@ -5,11 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:ride_on/singleton.dart';
 import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
-import '../objects/rideObject.dart';
-import '../objects/rideObject.dart';
-import '../objects/rideObject.dart';
-import '../objects/rideObject.dart';
-import '../objects/rideObject.dart';
 import '../services/authentication.dart';
 
 
