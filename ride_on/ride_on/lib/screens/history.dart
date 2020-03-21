@@ -1,6 +1,15 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
+import '../objects/rideObject.dart';
+import '../objects/rideObject.dart';
+import '../objects/rideObject.dart';
+import '../objects/rideObject.dart';
+import '../objects/rideObject.dart';
+import '../services/authentication.dart';
 
 
 TextStyle tableHeader()
@@ -20,14 +29,169 @@ TextStyle tableData()
   );
 }
 
-class HistoryRoute extends StatelessWidget {
-  static List<RideObject> rideHistory = List();
-  static var newRideHistory = List<RideObject>();
+class HistoryRoute extends StatefulWidget
+{
+  HistoryRoute({Key key, this.auth, this.userId, this.logoutCallback})
+      : super(key: key);
 
-  static void saveRide(RideObject newRide)
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
+
+  @override
+  State<StatefulWidget> createState() => new _HistoryRouteState();
+}
+
+class _HistoryRouteState extends State<HistoryRoute>
+{
+  List<RideObject> rideHistory = List();
+  var newRideHistory = List<RideObject>();
+
+  void saveRide(RideObject newRide)
   {
     newRideHistory.add(newRide);
   }
+
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  
+  Query rideQuery;
+  StreamSubscription<Event> _onRideAddedSubscription;
+  StreamSubscription<Event> _onRideChangedSubscription;
+  
+  @override
+  void initState()
+  {
+    super.initState();
+    rideHistory = new List();
+    rideQuery = _database.reference().child("Ride")
+        .orderByChild("AssociatedUsername")
+        .equalTo(widget.userId);
+    _onRideAddedSubscription = rideQuery.onChildAdded.listen(onEntryAdded);
+    _onRideChangedSubscription =
+        rideQuery.onChildAdded.listen(onEntryChanged);
+  }
+
+  onEntryAdded(Event event) {
+    setState(() {
+      rideHistory.add(RideObject.fromSnapshot(event.snapshot));
+    });
+  }
+
+  onEntryChanged(Event event) {
+    var oldEntry = rideHistory.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+
+    setState(() {
+      rideHistory[rideHistory.indexOf(oldEntry)] =
+          RideObject.fromSnapshot(event.snapshot);
+    });
+  }
+
+  @override
+  void dispose() {
+    _onRideAddedSubscription.cancel();
+    _onRideChangedSubscription.cancel();
+    super.dispose();
+  }
+
+  addNewRide(RideObject rideItem) {
+    if (RideObject != null) {
+      _database.reference().child("Ride").push().set(rideItem.toJson());
+    }
+  }
+
+  /*
+  updateRide(RideO todo) {
+    //Toggle completed
+    todo.completed = !todo.completed;
+    if (todo != null) {
+      _database.reference().child("todo").child(todo.key).set(todo.toJson());
+    }
+  }
+
+   */
+/*
+  deleteTodo(String todoId, int index) {
+    _database.reference().child("todo").child(todoId).remove().then((_) {
+      print("Delete $todoId successful");
+      setState(() {
+        _todoList.removeAt(index);
+      });
+    });
+  }
+
+ */
+
+  Widget showRideList() {
+    if (rideHistory.length > 0) {
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: rideHistory.length,
+          itemBuilder: (BuildContext context, int index) {
+            String rideId = rideHistory[index].key;
+            DateTime rideDate = rideHistory[index].rideDate;
+            String vehicleName = rideHistory[index].vehicleName;
+            String userId = rideHistory[index].userId;
+            int rideDuration = rideHistory[index].rideTimeSec;
+            double maxSpeed = rideHistory[index].maxSpeed;
+            return Dismissible(
+              key: Key(rideId),
+              background: Container(color: Colors.red),
+              onDismissed: (direction) async {
+                //deleteTodo(todoId, index);
+              },
+              child: ListTile(
+
+                leading: FlutterLogo(size: 56.0),
+                title: Text(vehicleName),
+                subtitle: Text(
+                    maxSpeed.toString() + " mph | " + rideDuration.toString() +
+                        " seconds riding"),
+                trailing: Icon(Icons.more_vert),
+
+              ),
+            );
+          });
+    } else {
+      return Center(
+          child: Text(
+            "Welcome. Your list is empty",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 30.0),
+          ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text('my Rides'),
+          actions: <Widget>[
+            new FlatButton(
+                child: new Text('Logout',
+                    style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+                onPressed: signOut)
+          ],
+        ),
+        drawer: HamburgerMenu(),
+        body: showRideList(),
+    );
+
+  }
+
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
 
 //  Widget generateHistoryTableRow(RideObject rideIn)
 //  {
@@ -50,7 +214,7 @@ class HistoryRoute extends StatelessWidget {
 //
 //    );
 //  }
-
+/*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -292,4 +456,6 @@ class HistoryRoute extends StatelessWidget {
       ),
     );
   }
+
+ */
 }

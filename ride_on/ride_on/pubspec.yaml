@@ -14,7 +14,7 @@ description: RideOn app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   sensors:
@@ -22,6 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_maps_flutter: ^0.5.24
+  firebase_database: ^3.1.3
   firebase_core: ^0.4.0+9   #used for firebase
 
   # Add the dependency for the FlutterFire plugin for Google Analytics
@@ -50,6 +51,9 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+
+  assets:
+    - lib/media/images/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
