@@ -6,6 +6,7 @@ import 'package:ride_on/singleton.dart';
 import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
 import '../services/authentication.dart';
+import '../accountMenu.dart';
 
 
 TextStyle tableHeader()
@@ -160,14 +161,11 @@ class _HistoryRouteState extends State<HistoryRoute>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         appBar: new AppBar(
           title: new Text('my Rides'),
           actions: <Widget>[
-            new FlatButton(
-                child: new Text('Logout',
-                    style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-                onPressed: signOut)
+            AccountMenu(),
           ],
         ),
         drawer: HamburgerMenu(),
