@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import '../hamburgerMenu.dart';
 import 'package:ride_on/singleton.dart';
@@ -38,7 +40,7 @@ class AccountRoute extends StatelessWidget {
             Text('e-mail: ' + mySingleton.email),
             Text('Quest: To seek the holy grail'),
             Text('Favorite Color: Green'),
-            FlatButton(
+            RaisedButton(
               child: Text("Sign Out"),
               onPressed: signOut,
             ),
