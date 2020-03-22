@@ -32,7 +32,7 @@ class HamburgerMenu extends StatelessWidget{
                   ? Colors.blue
                   : Colors.white,
               child: Text(
-                userName.substring(0, 1),
+                mySingleton.email.substring(0, 1).toUpperCase(),
                 style: TextStyle(fontSize: 40.0),
               ),
             ),
