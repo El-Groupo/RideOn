@@ -253,7 +253,9 @@ class _MyHomePageState extends State<MyHomePage>
         future: FirebaseAuth.instance.currentUser(),
         builder: (context, AsyncSnapshot<FirebaseUser> user) {
           if (user.hasData) {
-            return HamburgerMenu.setUser("user.data.displayName", user.data.email);
+            mySingleton.setEmail(user.data.email);
+            mySingleton.setUserID(user.data.uid);
+            return HamburgerMenu();//.setUser("user.data.uid", "user.data.email");
           }
           else {
             return Text('Loading...');
