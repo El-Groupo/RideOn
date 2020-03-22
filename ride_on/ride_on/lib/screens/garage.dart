@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../hamburgerMenu.dart';
+import '../accountMenu.dart';
 
 
 TextStyle tableHeader()
@@ -25,6 +26,9 @@ class GarageRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Garage'),
+        actions: <Widget>[
+          AccountMenu(),
+        ],
       ),
       drawer: HamburgerMenu(),
       body: Center(

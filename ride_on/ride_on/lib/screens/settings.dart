@@ -5,15 +5,14 @@ import '../login_pages/login_signup_page.dart';
 import '../login_pages/root_page.dart';
 import 'home.dart';
 import '../services/authentication.dart';
+import '../accountMenu.dart';
 
 class SettingsRoute extends StatefulWidget {
 
   SettingsRoute(
-      {Key key, this.title, this.auth, this.userId, this.logoutCallback})
+      {Key key, this.title, this.userId})
       : super(key: key);
   final String title;
-  final BaseAuth auth;
-  final VoidCallback logoutCallback;
   final String userId;
 
   @override
@@ -32,6 +31,9 @@ class _SettingsRouteState extends State<SettingsRoute>
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
+        actions: <Widget>[
+          AccountMenu(),
+        ],
       ),
       drawer: HamburgerMenu(),
       body: Center(
@@ -51,25 +53,10 @@ class _SettingsRouteState extends State<SettingsRoute>
               ListTile(
                 title: Text('Some other setting'),
               ),
-              ListTile(
-                title: Text('Logout'),
-                onTap: ()
-                {
-                  signOut();
-                },
-              ),
             ],
           )
       ),
     );
   }
 
-  signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.logoutCallback();
-    } catch (e) {
-      print(e);
-    }
-  }
 }
