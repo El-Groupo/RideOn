@@ -9,28 +9,26 @@ class AccountMenu extends StatelessWidget{
   static var mySingleton = Singleton();
   var context;
 
-  signOut() async {
 
-    while(Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
-
-    try {
-      await mySingleton.auth.signOut();
-      mySingleton.logoutCallback();
-    } catch (e) {
-      print(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
-    return FlatButton(
-      child: new Text('Logout',
-          style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-      onPressed: signOut,
+    return IconButton(
+      icon: Icon(Icons.account_circle),
+      iconSize: 45,
+      onPressed: () {
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AccountRoute()),
+        );
+      }
     );
+//      FlatButton(
+//      child: new Text('Logout',
+//          style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+//      onPressed: signOut,
+//    );
   }
 }
 
