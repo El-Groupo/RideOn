@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage>
     }
 
     var tempLine= new Polyline(
-        polylineId: PolylineId('steven' + num.toString()),
+        polylineId: PolylineId(DateTime.now().toIso8601String()),
         points:latlngList,
         color: Colors.blue,//[(100 + num * 10) % 500],  //for some reason, this gives an error after a few seconds
         startCap: Cap.roundCap,
@@ -119,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage>
 //      _routes.
 //    }
     _routes = _routes.union(tempSet);
+
 
    rideData.push().set(currRide.toJson());
     mySingleton.addRide(currRide);
@@ -278,23 +279,26 @@ class _MyHomePageState extends State<MyHomePage>
                   var displayLoc;
                   if (currLoc.hasData) {
                     displayLoc = LatLng(currLoc.data.latitude, currLoc.data.longitude);
-                  }
-                  else {
-                    displayLoc = LatLng(40.2463985, -111.6541483);
-                  }
-                  return GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    mapType: MapType.hybrid,
-                    initialCameraPosition: CameraPosition(
-                      target: displayLoc,
-                      //LatLng(40.2463985, -111.6541483),
+                    return GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      mapType: MapType.hybrid,
+                      myLocationEnabled: true,
+                      initialCameraPosition: CameraPosition(
+                        target: displayLoc,
+                        //LatLng(40.2463985, -111.6541483),
 //                      (userLocation == null ? 40.2463985 : userLocation.latitude),         FIXED??
 //                      (userLocation == null ? -111.6541483 : userLocation.longitude)       FIXED??
 
-                      zoom: 17.0,
-                    ),
-                    polylines: _routes,
-                  );
+                        zoom: 17.0,
+                      ),
+                      polylines: _routes,
+                    );
+                  }
+                  else {
+                    displayLoc = LatLng(40.2463985, -111.6541483);
+                    return Text("Loading...");
+                  }
+
                 },
               ),
             ),
