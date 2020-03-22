@@ -4,6 +4,7 @@ import 'screens/garage.dart';
 import 'screens/account.dart';
 import 'screens/settings.dart';
 import 'screens/help.dart';
+import 'package:ride_on/singleton.dart';
 
 class HamburgerMenu extends StatelessWidget{
   HamburgerMenu();
@@ -14,6 +15,7 @@ class HamburgerMenu extends StatelessWidget{
     userEmail = userEmailIn;
   }
 
+  var mySingleton = Singleton();
   static String userName, userEmail;
 
   @override
@@ -22,8 +24,8 @@ class HamburgerMenu extends StatelessWidget{
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text(userName),
-            accountEmail: Text(userEmail),
+            accountName: Text(mySingleton.userID),
+            accountEmail: Text(mySingleton.email),
             currentAccountPicture: CircleAvatar(
               backgroundColor:
               Theme.of(context).platform == TargetPlatform.iOS
