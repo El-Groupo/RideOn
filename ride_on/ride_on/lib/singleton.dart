@@ -1,11 +1,13 @@
 //import 'dart:html';
-
+import 'package:flutter/material.dart';
 import 'objects/rideObject.dart';
+import 'services/authentication.dart';
 
 
 class Singleton
 {
   static final Singleton _singleton = Singleton.internal();
+
   List<RideObject> myRides = List();
   String email;
   String username;
@@ -42,4 +44,15 @@ class Singleton
   }
 
   Singleton.internal();
+
+  //accountMenu (logout) items
+  BaseAuth auth;
+  VoidCallback logoutCallback;
+
+  void setAuth(BaseAuth auth) { this.auth = auth; }
+  void setLogoutCallback(VoidCallback logoutCallback) { this.logoutCallback = logoutCallback; }
+
+  BaseAuth getAuth() { return auth; }
+  VoidCallback getLogoutCallback() { return logoutCallback; }
+//*accountMenu Items*
 }
