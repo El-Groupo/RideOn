@@ -9,9 +9,9 @@ class Singleton
   static final Singleton _singleton = Singleton.internal();
 
   List<RideObject> myRides = List();
-  String email;
-  String username;
-  String userID;
+  String email = "";
+  String username = "";
+  String userID = "";
 
   factory Singleton()
   {
