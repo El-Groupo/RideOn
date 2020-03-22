@@ -295,10 +295,8 @@ class _MyHomePageState extends State<MyHomePage>
                     );
                   }
                   else {
-                    displayLoc = LatLng(40.2463985, -111.6541483);
                     return Text("Loading...");
                   }
-
                 },
               ),
             ),
