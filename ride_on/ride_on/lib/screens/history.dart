@@ -142,7 +142,7 @@ class _HistoryRouteState extends State<HistoryRoute>
                 leading: FlutterLogo(size: 56.0),
                 title: Text(vehicleName),
                 subtitle: Text(
-                    maxSpeed.toString() + " mph | " + rideDuration.toString() +
+                    maxSpeed.toStringAsFixed(2) + " mph | " + rideDuration.toString() +
                         " seconds riding"),
                 trailing: Icon(Icons.more_vert),
 
