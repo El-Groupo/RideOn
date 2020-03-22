@@ -34,8 +34,8 @@ class AccountRoute extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text('Username: IBeDaUser'),
-            Text('email: userEmail@gmail.com'),
+            Text('Username: ' + mySingleton.userID),
+            Text('e-mail: ' + mySingleton.email),
             Text('Quest: To seek the holy grail'),
             Text('Favorite Color: Green'),
             FlatButton(
