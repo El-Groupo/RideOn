@@ -15,12 +15,19 @@ import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
 import '../singleton.dart';
 import 'history.dart';
+import '../accountMenu.dart';
 
 class MyHomePage extends StatefulWidget
 {
 
-  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key);
+  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key)
+  {
+    theSingleton = Singleton();
+    theSingleton.setAuth(auth);
+    theSingleton.setLogoutCallback(logoutCallback);
+  }
 
+  var theSingleton;
   final String title;
   final BaseAuth auth;
   final VoidCallback logoutCallback;
@@ -33,10 +40,11 @@ class MyHomePage extends StatefulWidget
 class _MyHomePageState extends State<MyHomePage>
 {
   var mySingleton = Singleton();
+  
   _MyHomePageState({this.user});
 
   final FirebaseUser user;
-  //final FirebaseDatabase _database = FirebaseDatabase.instance;
+//  final FirebaseDatabase _database = FirebaseDatabase.instance;
   final DatabaseReference rideData = FirebaseDatabase.instance.reference().child("ride");
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -194,8 +202,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   signOut() async {
     try {
-      await widget.auth.signOut();
-      widget.logoutCallback();
+      await mySingleton.auth.signOut();
+      mySingleton.logoutCallback();
     } catch (e) {
       print(e);
     }
@@ -238,11 +246,12 @@ class _MyHomePageState extends State<MyHomePage>
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-          new FlatButton(
-              child: new Text('Logout',
-                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-              onPressed: signOut,
-          )
+          AccountMenu(),
+//          new FlatButton(
+//              child: new Text('Logout',
+//                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+//              onPressed: signOut,
+//          )
         ],
       ),
       drawer: FutureBuilder(
