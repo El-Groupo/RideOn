@@ -21,13 +21,10 @@ class RideObject
   double maxSpeed = 0.0;  //in mph
   double rideLength = 0.0;  //in meters
   int rideTimeSec = 0;  //in seconds
-  var rideRoute = new List<LatLng>();
+  List rideRoute = new List<LatLng>();
   String vehicleName;
-<<<<<<< Updated upstream
-=======
   List test = new List<LatLng>();
   List rideRouteDoubles = new List<double>();
->>>>>>> Stashed changes
 
   //other info
     //vehicle
@@ -42,13 +39,15 @@ class RideObject
   void setDate(DateTime dateIn) {
     rideDate = dateIn; }
   void setName(String name) { vehicleName = name; }
-<<<<<<< Updated upstream
-=======
   void setUserID(String userID) {
     this.userId = userID;}
   void setRideLength(double length) {this.rideLength = length;}
   void setRideTime(int time) {this.rideTimeSec = time;}
-  void setRideRouteDoubles (List<double> route) {this.rideRouteDoubles = route;}
+  void setRideRouteDoubles (List<double> route)
+  {
+    this.rideRouteDoubles = route;
+    createRoute();
+  }
   void setMaxSpeed(double speed) {this.maxSpeed = speed;}
 
   String getUserID() {return userId;}
@@ -57,7 +56,6 @@ class RideObject
   int getRideTime() {return rideTimeSec;}
   List getRideRoute() {return rideRoute;}
   String getVehicleName() {return vehicleName;}
->>>>>>> Stashed changes
 
 
   RideObject();
@@ -74,18 +72,20 @@ class RideObject
         vehicleName = snapshot.value["vehicleName"];
 
   toJson() {
+    List myRoute = new List<double>();
+    for (LatLng coordinates in rideRoute)
+    {
+      myRoute.add(coordinates.latitude);
+      myRoute.add(coordinates.longitude);
+    }
+
     return {
       "userId": userId,
       "maxSpeed": maxSpeed,
       "rideLength": rideLength,
       "rideTimeSec": rideTimeSec,
-<<<<<<< Updated upstream
-      "rideRoute": rideRoute,
-      "rideDate": rideDate,
-=======
       "rideRouteDoubles": myRoute,
       "rideDate": rideDate.toString(),
->>>>>>> Stashed changes
       "vehiclename": vehicleName,
     };
   }

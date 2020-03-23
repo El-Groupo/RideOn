@@ -13,6 +13,7 @@ import '../login_pages/root_page.dart';
 import '../services/authentication.dart';
 import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
+import '../singleton.dart';
 import 'history.dart';
 
 class MyHomePage extends StatefulWidget
@@ -31,12 +32,12 @@ class MyHomePage extends StatefulWidget
 
 class _MyHomePageState extends State<MyHomePage>
 {
+  var mySingleton = Singleton();
   _MyHomePageState({this.user});
 
   final FirebaseUser user;
-  final FirebaseDatabase _database = FirebaseDatabase.instance;
-  DatabaseReference itemRef;
   //final FirebaseDatabase _database = FirebaseDatabase.instance;
+  final DatabaseReference rideData = FirebaseDatabase.instance.reference().child("ride");
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   static bool _isRecording = false;
@@ -58,6 +59,25 @@ class _MyHomePageState extends State<MyHomePage>
 
   static Set<Polyline> _routes = new Set<Polyline>();
   static int num = 0;
+
+  saveData()
+  {
+    rideData.push().set({
+      'userId': 'currRide.getUserID()',
+      'maxSpeed': currRide.maxSpeed,
+      'rideLength': currRide.rideLength,
+      'rideTimeSec': currRide.rideTimeSec,
+      'rideRoute': currRide.rideRoute,
+      'rideDate': currRide.rideDate,
+      'vehiclename': currRide.vehicleName,
+    });
+  }
+
+  void grabData()
+  {
+    Query rideQuery = rideData.orderByChild("userId").equalTo(widget.userId);
+    //rideQuery.
+  }
 
   void addRide(RideObject rideIn)
   {
@@ -95,7 +115,8 @@ class _MyHomePageState extends State<MyHomePage>
 //    }
     _routes = _routes.union(tempSet);
 
-   // _database.reference().child("Ride").push().set(rideIn.toJson());
+   rideData.push().set(currRide.toJson());
+    mySingleton.addRide(currRide);
   }
 
   void _toggleRecording()
@@ -109,16 +130,11 @@ class _MyHomePageState extends State<MyHomePage>
         currRide = new RideObject();
         currRide.setDate(DateTime.now());
         currRide.setName(myToy);
+        currRide.setUserID(widget.userId);
       }
       else if(_isRecording){
         _isRecording = false;
         addRide(currRide);
-<<<<<<< Updated upstream
-        _database.reference().child("Ride").push().set(currRide.toJson());
-        //handleSubmit();
-        //put it on the database
-=======
->>>>>>> Stashed changes
       }
     });
   }
@@ -188,9 +204,6 @@ class _MyHomePageState extends State<MyHomePage>
   void initState()
   {
     super.initState();
-<<<<<<< Updated upstream
-    itemRef = FirebaseDatabase.instance.reference().child('Rides');
-=======
     //mySingleton.setEmail(user.data.email)
     mySingleton.setUserID(widget.userId);
     mySingleton.myRides.clear();
@@ -200,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage>
     {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
-      
+
       for (var individualKey in KEYS)
         {
           String userID =  DATA[individualKey]['userId'];
@@ -238,7 +251,6 @@ class _MyHomePageState extends State<MyHomePage>
             newRide.setRideRouteDoubles(myRoute);
             mySingleton.addRide(newRide);
           }
->>>>>>> Stashed changes
 
         }
     });
@@ -273,7 +285,8 @@ class _MyHomePageState extends State<MyHomePage>
           new FlatButton(
               child: new Text('Logout',
                   style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-              onPressed: signOut)
+              onPressed: signOut,
+          )
         ],
       ),
       drawer: FutureBuilder(
