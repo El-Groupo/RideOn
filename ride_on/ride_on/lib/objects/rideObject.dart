@@ -23,6 +23,11 @@ class RideObject
   int rideTimeSec = 0;  //in seconds
   var rideRoute = new List<LatLng>();
   String vehicleName;
+<<<<<<< Updated upstream
+=======
+  List test = new List<LatLng>();
+  List rideRouteDoubles = new List<double>();
+>>>>>>> Stashed changes
 
   //other info
     //vehicle
@@ -34,8 +39,26 @@ class RideObject
   double getDistance() { return rideLength * .000621371; }
   void incRideTime() { rideTimeSec++; }
   double getAvgSpeed() { return mpsTomph(rideLength / rideTimeSec);}
-  void setDate(DateTime dateIn) { rideDate = dateIn; }
+  void setDate(DateTime dateIn) {
+    rideDate = dateIn; }
   void setName(String name) { vehicleName = name; }
+<<<<<<< Updated upstream
+=======
+  void setUserID(String userID) {
+    this.userId = userID;}
+  void setRideLength(double length) {this.rideLength = length;}
+  void setRideTime(int time) {this.rideTimeSec = time;}
+  void setRideRouteDoubles (List<double> route) {this.rideRouteDoubles = route;}
+  void setMaxSpeed(double speed) {this.maxSpeed = speed;}
+
+  String getUserID() {return userId;}
+  double getRideLength() {return rideLength;}
+  double getMaxSpeed() {return maxSpeed;}
+  int getRideTime() {return rideTimeSec;}
+  List getRideRoute() {return rideRoute;}
+  String getVehicleName() {return vehicleName;}
+>>>>>>> Stashed changes
+
 
   RideObject();
   //RideObject(this.maxSpeed, this.userId, this.rideLength, this.rideTimeSec, this.rideRoute, this.rideDate, this.vehicleName);
@@ -46,7 +69,7 @@ class RideObject
         maxSpeed = snapshot.value["maxSpeed"],
         rideLength = snapshot.value["rideLength"],
         rideTimeSec = snapshot.value["rideTimeSec"],
-        rideRoute = snapshot.value["rideRoute"],
+        rideRouteDoubles = snapshot.value["rideRouteDoubles"],
         rideDate = snapshot.value["rideDate"],
         vehicleName = snapshot.value["vehicleName"];
 
@@ -56,9 +79,33 @@ class RideObject
       "maxSpeed": maxSpeed,
       "rideLength": rideLength,
       "rideTimeSec": rideTimeSec,
+<<<<<<< Updated upstream
       "rideRoute": rideRoute,
       "rideDate": rideDate,
+=======
+      "rideRouteDoubles": myRoute,
+      "rideDate": rideDate.toString(),
+>>>>>>> Stashed changes
       "vehiclename": vehicleName,
     };
+  }
+
+  void createRoute()
+  {
+    double lat = 0;
+    double long = 0;
+    int i = 0;
+    for (double coordinate in rideRouteDoubles)
+      {
+        if (i%2 == 1)
+        {
+          lat = coordinate;
+        }
+        else
+        {
+          long = coordinate;
+          rideRoute.add(LatLng(lat,long));
+        }
+      }
   }
 }

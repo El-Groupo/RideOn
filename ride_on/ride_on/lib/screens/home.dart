@@ -46,6 +46,9 @@ class _MyHomePageState extends State<MyHomePage>
   static String myToy = "big red";
   Timer _everySecond; //recording frequency timer
 
+
+
+
   GoogleMapController mapController;
   void _onMapCreated(GoogleMapController controller)
   {
@@ -108,11 +111,13 @@ class _MyHomePageState extends State<MyHomePage>
       }
       else if(_isRecording){
         _isRecording = false;
-        //HistoryRoute.saveRide(currRide);
         addRide(currRide);
+<<<<<<< Updated upstream
         _database.reference().child("Ride").push().set(currRide.toJson());
         //handleSubmit();
         //put it on the database
+=======
+>>>>>>> Stashed changes
       }
     });
   }
@@ -170,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   signOut() async {
     try {
+      mySingleton.clearSingleton();
       await widget.auth.signOut();
       widget.logoutCallback();
     } catch (e) {
@@ -177,26 +183,64 @@ class _MyHomePageState extends State<MyHomePage>
     }
   }
 
-  /*
-  void handleSubmit()
-  {
-    final FormState form = formKey.currentState;
-    if (form.validate())
-      {
-        form.save();
-        form.reset();
-        itemRef.push().set(currRide.toJson());
-      }
-  }
-
-   */
-
   @override
   void initState()
   {
     super.initState();
+<<<<<<< Updated upstream
     itemRef = FirebaseDatabase.instance.reference().child('Rides');
+=======
+    //mySingleton.setEmail(user.data.email)
+    mySingleton.setUserID(widget.userId);
+    mySingleton.myRides.clear();
+    DatabaseReference rideRef = FirebaseDatabase.instance.reference().child("ride");
 
+    rideRef.once().then((DataSnapshot snap)
+    {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+      
+      for (var individualKey in KEYS)
+        {
+          String userID =  DATA[individualKey]['userId'];
+          if(userID == widget.userId) {
+            RideObject newRide = new RideObject();
+
+            newRide.setUserID(userID);
+            String date = DATA[individualKey]['rideDate'];
+            DateTime myDate = parseDate(date);
+            newRide.setDate(myDate);
+            double mySpeed = 0;
+            try {
+              int speed = DATA[individualKey]['maxSpeed'];
+              mySpeed = speed.toDouble();
+            }
+            catch (Exception){
+              mySpeed = DATA[individualKey]['maxSpeed'];
+            }
+            newRide.setMaxSpeed(mySpeed);
+            double myLength = 0;
+            try {
+              int length = DATA[individualKey]['rideLength'];
+              myLength = length.toDouble();
+            }
+            catch (Exception) {
+              myLength = DATA[individualKey]['rideLength'];
+            }
+            newRide.setRideLength(myLength);
+            String name = DATA[individualKey]['vehiclename'];
+            newRide.setName(name);
+            int time = DATA[individualKey]['rideTimeSec'];
+            newRide.setRideTime(time);
+            List<dynamic> route = DATA[individualKey]['rideRouteDoubles'];
+            List<double> myRoute = route.map((s) => s as double).toList();
+            newRide.setRideRouteDoubles(myRoute);
+            mySingleton.addRide(newRide);
+          }
+>>>>>>> Stashed changes
+
+        }
+    });
     //_getCurrLocation();
 
 
@@ -206,6 +250,17 @@ class _MyHomePageState extends State<MyHomePage>
       if(_isRecording) updateScreen();
     });
   }
+
+  //2020-03-21 16:56:46.95467...
+
+  DateTime parseDate(String date)
+  {
+    String year = date.substring(0,4);
+    String month = date.substring(5,7);
+    String day = date.substring(8,10);
+    return DateTime(int.parse(year), int.parse(month), int.parse(day));
+  }
+
 
   @override
   Widget build(BuildContext context)
