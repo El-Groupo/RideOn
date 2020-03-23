@@ -145,7 +145,6 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             children: <Widget>[
               showLogo(),
               showErrorMessage(),
-              showUserNameInput(),
               showEmailInput(),
               showPasswordInput(),
               showPrimaryButton(),
@@ -191,25 +190,6 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           radius: 100.0,
           child: Image.asset('lib/media/images/MotorbikePNG.png'),
         ),
-      ),
-    );
-  }
-
-  Widget showUserNameInput() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: new TextFormField(
-        maxLines: 1,
-        keyboardType: TextInputType.text,
-        autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Name',
-            icon: new Icon(
-              Icons.account_box,
-              color: Colors.grey,
-            )),
-        validator: (value) => value.isEmpty ? 'Name can\'t be empty' : null,
-        onSaved: (value) => _name = value.trim(),
       ),
     );
   }
