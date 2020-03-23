@@ -36,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage>
   final FirebaseUser user;
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   DatabaseReference itemRef;
+  //final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   static bool _isRecording = false;
