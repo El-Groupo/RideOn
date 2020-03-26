@@ -1,5 +1,7 @@
 //import 'dart:html';
 
+import 'package:ride_on/objects/vehicleObject.dart';
+
 import 'objects/rideObject.dart';
 
 
@@ -7,6 +9,7 @@ class Singleton
 {
   static final Singleton _singleton = Singleton.internal();
   List<RideObject> myRides = List();
+  List<VehicleObject> myToys = List();
   String email;
   String username;
   String userID;
@@ -23,10 +26,18 @@ class Singleton
   {
     myRides.add(newRide);
   }
+  void addToy(VehicleObject newToy)
+  {
+    myToys.add(newToy);
+  }
 
   List<RideObject> getRides()
   {
     return myRides;
+  }
+  List<VehicleObject> getToys()
+  {
+    return myToys;
   }
   String getEmail()
   {
@@ -44,6 +55,7 @@ class Singleton
   void clearSingleton()
   {
     myRides.clear();
+    myToys.clear();
     email = "";
     username = "";
     userID = "";

@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ride_on/objects/vehicleObject.dart';
 
 import '../login_pages/login_signup_page.dart';
 import '../login_pages/root_page.dart';
@@ -59,25 +60,6 @@ class _MyHomePageState extends State<MyHomePage>
 
   static Set<Polyline> _routes = new Set<Polyline>();
   static int num = 0;
-
-  saveData()
-  {
-    rideData.push().set({
-      'userId': 'currRide.getUserID()',
-      'maxSpeed': currRide.maxSpeed,
-      'rideLength': currRide.rideLength,
-      'rideTimeSec': currRide.rideTimeSec,
-      'rideRoute': currRide.rideRoute,
-      'rideDate': currRide.rideDate,
-      'vehiclename': currRide.vehicleName,
-    });
-  }
-
-  void grabData()
-  {
-    Query rideQuery = rideData.orderByChild("userId").equalTo(widget.userId);
-    //rideQuery.
-  }
 
   void addRide(RideObject rideIn)
   {
@@ -208,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage>
     mySingleton.setUserID(widget.userId);
     mySingleton.myRides.clear();
     DatabaseReference rideRef = FirebaseDatabase.instance.reference().child("ride");
+    DatabaseReference vehicleRef = FirebaseDatabase.instance.reference().child("vehicle");
 
     rideRef.once().then((DataSnapshot snap)
     {
@@ -252,6 +235,47 @@ class _MyHomePageState extends State<MyHomePage>
             mySingleton.addRide(newRide);
           }
 
+        }
+    });
+
+    vehicleRef.once().then((DataSnapshot snap)
+    {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+
+      for (var key in KEYS)
+        {
+          String userID = DATA[key]['userId'];
+          if(userID == widget.userId) {
+            VehicleObject newVehicle = new VehicleObject();
+
+            newVehicle.setUserId(userID);
+            String purchDate = DATA[key]['purchaseDate'];
+            newVehicle.setPurchaseDate(parseDate(purchDate));
+            double allTimeTopSpeed = 0;
+            try {
+              int speed = DATA[key]['allTimeTopSpeed'];
+              allTimeTopSpeed = speed.toDouble();
+            }
+            catch (Exception) {
+              allTimeTopSpeed = DATA[key]['allTimeTopSpeed'];
+            }
+            newVehicle.setTopSpeed(allTimeTopSpeed);
+            double totalHours = 0;
+            try {
+              int hours = DATA[key]['totalVehicleHours'];
+              totalHours = hours.toDouble();
+            }
+            catch (Exception){
+              totalHours = DATA[key]['totalVehicleHours'];
+            }
+            newVehicle.setTotalHours(totalHours);
+            String nickname = DATA[key]['toyNickname'];
+            newVehicle.setNickname(nickname);
+            String toyType = DATA[key]['toyType'];
+            newVehicle.setType(toyType);
+            mySingleton.addToy(newVehicle);
+          }
         }
     });
     //_getCurrLocation();

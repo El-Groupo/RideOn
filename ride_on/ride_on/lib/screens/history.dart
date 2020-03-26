@@ -101,7 +101,7 @@ class _HistoryRouteState extends State<HistoryRoute>
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('my Rides'),
+          title: new Text('My Rides'),
           actions: <Widget>[
             new FlatButton(
                 child: new Text('Logout',
