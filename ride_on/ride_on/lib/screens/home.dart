@@ -240,6 +240,11 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
+  void doNothing()
+  {
+
+  }
+
   @override
   Widget build(BuildContext context)
   {
