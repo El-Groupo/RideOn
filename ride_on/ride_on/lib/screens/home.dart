@@ -300,7 +300,13 @@ class _MyHomePageState extends State<MyHomePage>
                     );
                   }
                   else {
-                    return Text("Loading...");
+                    return Text(
+                      "Loading...",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
+                    );
                   }
                 },
               ),
