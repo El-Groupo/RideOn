@@ -148,6 +148,8 @@ class _GarageRouteState extends State<GarageRoute>
 
   showAddVehicleDialog(BuildContext context) async
   {
+    nameController.clear();
+    dateController.clear();
     await showDialog<String>(
       context: context,
       builder: (BuildContext context) {

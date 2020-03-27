@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:ride_on/objects/vehicleObject.dart';
+import 'package:ride_on/singleton.dart';
 
 //import vehicle class
 
@@ -16,6 +18,7 @@ class RideLocation
 class RideObject
 {
   //core stats
+  var mySingleton = Singleton();
   String userId;
   String key;
   double maxSpeed = 0.0;  //in mph
@@ -25,6 +28,7 @@ class RideObject
   String vehicleName;
   List test = new List<LatLng>();
   List rideRouteDoubles = new List<double>();
+  VehicleObject myVehicle;
 
   //other info
     //vehicle
@@ -49,6 +53,20 @@ class RideObject
     createRoute();
   }
   void setMaxSpeed(double speed) {this.maxSpeed = speed;}
+  void setVehicleWithObject(VehicleObject myVehicle) {this.myVehicle = myVehicle;}
+  void setVehicleFromDatabase()
+  {
+    VehicleObject newVehicle = new VehicleObject();
+    newVehicle.setNickname(vehicleName);
+    newVehicle.setType("other");
+    myVehicle = newVehicle;
+    for (VehicleObject vehicle in mySingleton.getToys())
+    {
+        if (vehicleName == vehicle.getNickname()) {
+          myVehicle = vehicle;
+        }
+    }
+  }
 
   String getUserID() {return userId;}
   double getRideLength() {return rideLength;}

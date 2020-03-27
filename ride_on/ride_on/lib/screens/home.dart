@@ -42,12 +42,14 @@ class _MyHomePageState extends State<MyHomePage>
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   static bool _isRecording = false;
-  static var currRide;// = new RideObject();
+  RideObject currRide = new RideObject();
+  VehicleObject currVehicle = new VehicleObject();
   static double maxSpeed = 0.0;
   var location = new Location();
   static LocationData userLocation;
-  static String myToy = "big red";
+  //static String myToy = "big red";
   Timer _everySecond; //recording frequency timer
+  DatabaseReference vehicleRef = FirebaseDatabase.instance.reference().child("vehicle");
 
 
 
@@ -63,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   void addRide(RideObject rideIn)
   {
+   //stuff for ride object
     num+= 10;
     var latlngList = List<LatLng>();
 
@@ -99,6 +102,14 @@ class _MyHomePageState extends State<MyHomePage>
 
    rideData.push().set(currRide.toJson());
     mySingleton.addRide(currRide);
+
+    //stuff for updating a vehicle
+    currVehicle.adjustTopSpeed(maxSpeed);
+    currVehicle.adjustHours(currRide.getRideTime());
+    currVehicle.adjustMiles(currRide.getDistance());
+    vehicleRef.child(currVehicle.key).set(currVehicle.toJson());
+    currRide = new RideObject();
+    currRide.setVehicleWithObject(currVehicle);
   }
 
   void _toggleRecording()
@@ -109,9 +120,10 @@ class _MyHomePageState extends State<MyHomePage>
       {
         _isRecording = true;
         location = new Location();
-        currRide = new RideObject();
+        //currRide = new RideObject();
         currRide.setDate(DateTime.now());
-        currRide.setName(myToy);
+
+        currRide.setName(currRide.myVehicle.getNickname());
         currRide.setUserID(widget.userId);
       }
       else if(_isRecording){
@@ -190,8 +202,6 @@ class _MyHomePageState extends State<MyHomePage>
     mySingleton.setUserID(widget.userId);
     mySingleton.myRides.clear();
     DatabaseReference rideRef = FirebaseDatabase.instance.reference().child("ride");
-    DatabaseReference vehicleRef = FirebaseDatabase.instance.reference().child("vehicle");
-
     rideRef.once().then((DataSnapshot snap)
     {
       var KEYS = snap.value.keys;
@@ -204,6 +214,7 @@ class _MyHomePageState extends State<MyHomePage>
             RideObject newRide = new RideObject();
 
             newRide.setUserID(userID);
+            newRide.key = individualKey;
             String date = DATA[individualKey]['rideDate'];
             DateTime myDate = parseDate(date);
             newRide.setDate(myDate);
@@ -232,6 +243,7 @@ class _MyHomePageState extends State<MyHomePage>
             List<dynamic> route = DATA[individualKey]['rideRouteDoubles'];
             List<double> myRoute = route.map((s) => s as double).toList();
             newRide.setRideRouteDoubles(myRoute);
+            newRide.setVehicleFromDatabase();
             mySingleton.addRide(newRide);
           }
 
@@ -250,6 +262,7 @@ class _MyHomePageState extends State<MyHomePage>
             VehicleObject newVehicle = new VehicleObject();
 
             newVehicle.setUserId(userID);
+            newVehicle.key = key;
             String purchDate = DATA[key]['purchaseDate'];
             newVehicle.setPurchaseDate(parseDate(purchDate));
             double allTimeTopSpeed = 0;
@@ -274,6 +287,15 @@ class _MyHomePageState extends State<MyHomePage>
             newVehicle.setNickname(nickname);
             String toyType = DATA[key]['toyType'];
             newVehicle.setType(toyType);
+            String isCurrent = DATA[key]['isCurrentVehicle'];
+            if (isCurrent == "true") {
+              newVehicle.setIsCurrentVehicle(true);
+              currRide.setVehicleWithObject(newVehicle);
+              currVehicle = newVehicle;
+            }
+            else {
+              newVehicle.setIsCurrentVehicle(false);
+            }
             mySingleton.addToy(newVehicle);
           }
         }
@@ -365,6 +387,12 @@ class _MyHomePageState extends State<MyHomePage>
               children: <Widget>[
                 Column(
                   children: <Widget>[
+                    SelectableText(
+                      displayCurrentVehicle(),
+                      onTap: () {
+                        showSelectVehicle(context);
+                      },
+                    ),
                     Text(
                       'Current Speed\n' +
                           ((userLocation != null && _isRecording) ?
@@ -420,6 +448,191 @@ class _MyHomePageState extends State<MyHomePage>
         ),
       ),
     );
+  }
+
+  String displayCurrentVehicle()
+  {
+    String nickname = "vehicle not selected";
+    for (VehicleObject vehicleObject in mySingleton.getToys())
+    {
+        if (vehicleObject.isCurrentVehicle) {
+          currRide.setVehicleWithObject(vehicleObject);
+          nickname = vehicleObject.getNickname();
+          currVehicle = vehicleObject;
+        }
+    }
+    return nickname;
+  }
+
+  void setCurrentVehicle(VehicleObject vehicle)
+  {
+    for (VehicleObject aVehicle in mySingleton.getToys())
+    {
+      if (aVehicle.getNickname() == vehicle.getNickname()) {
+        currRide.setVehicleWithObject(vehicle);
+        aVehicle.setIsCurrentVehicle(true);
+        currVehicle = aVehicle;
+      }
+      else {
+        aVehicle.setIsCurrentVehicle(false);
+      }
+      vehicleRef.child(aVehicle.key).set(aVehicle.toJson());
+    }
+  }
+
+
+
+//Stuff for adding a vehicle, taken from the garage
+  final nameController = TextEditingController();
+  final dateController = TextEditingController();
+  DateTime newPurchaseDate;
+  String newToyNickname = "";
+  VehicleType newToyType;
+
+  showSelectVehicle(BuildContext context) async
+  {
+    await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Select your vehicle"),
+          content: Container(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: mySingleton.getToys().length,
+                  itemBuilder: getListItemTile,
+                ),
+                SelectableText(
+                  'Add vehicle',
+                  onTap: () {
+                    showAddVehicleDialog(context);
+                  },
+                )
+              ]
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget getListItemTile(BuildContext context, int index)
+  {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currRide.setVehicleWithObject(mySingleton.getToys()[index]);
+          currRide.setName(mySingleton.getToys()[index].getNickname());
+          setCurrentVehicle(mySingleton.getToys()[index]);
+        });
+      },
+
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 4),
+        color: Colors.white,
+        child: ListTile(
+          title: Text(mySingleton.getToys()[index].getNickname()),
+        ),
+      ),
+    );
+  }
+
+  showAddVehicleDialog(BuildContext context) async
+  {
+    nameController.clear();
+    dateController.clear();
+    await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: new Text("Add New Vehicle"),
+              content: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: nameController,
+                    autofocus: true,
+                    decoration: new InputDecoration(
+                      labelText: "Vehicle Name",
+                    ),
+                  ),
+                  TextFormField(
+                    controller: dateController,
+                    autofocus: true,
+                    decoration: new InputDecoration(
+                      labelText: "Purchase date yyyy-mm-dd",
+                    ),
+                  ),
+                  DropdownButton(
+                    hint: Text('Please select vehicle type'),
+                    value: newToyType,
+                    onChanged: (newValue) {
+                      setState(() {
+                        newToyType = newValue;
+                      });
+                    },
+                    items: VehicleType.values.map((type) {
+                      return DropdownMenuItem(
+                        child: new Text(printVehicleType(type)),
+                        value: type,
+                      );
+                    }).toList(),
+                  )
+                ],
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                    child: const Text('Cancel'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                new FlatButton(
+                    child: const Text('Save'),
+                    onPressed: () {
+                      addNewVehicle(nameController.text.toString(), dateController.text.toString());
+                      Navigator.pop(context);
+                    }),
+              ]
+          );
+        });
+  }
+
+  String printVehicleType(VehicleType type) {
+    String vehicleType = "";
+    switch(type)
+    {
+      case VehicleType.motorcycle:
+        vehicleType += "Motorcycle";
+        break;
+      case VehicleType.fourWheeler:
+        vehicleType += "4 Wheeler";
+        break;
+      case VehicleType.utv:
+        vehicleType += "UTV";
+        break;
+      case VehicleType.other:
+        vehicleType += "Other";
+        break;
+    }
+    return vehicleType;
+  }
+
+  void addNewVehicle(String name, String date)
+  {
+    VehicleObject newVehicle = new VehicleObject();
+    newVehicle.setNickname(name);
+    newVehicle.setPurchaseDate(parseDate(date));
+    newVehicle.setEnumType(newToyType);
+    newVehicle.setTopSpeed(0.0);
+    newVehicle.setTotalHours(0.0);
+    newVehicle.setUserId(mySingleton.userID);
+    vehicleRef.push().set(newVehicle.toJson());
+    newVehicle.getCreatedKey();
+    setCurrentVehicle(newVehicle);
+    mySingleton.addToy(newVehicle);
   }
 }
 

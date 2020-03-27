@@ -193,7 +193,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
       ),
     );
   }
-  
+
   Widget showEmailInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),

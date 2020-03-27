@@ -13,12 +13,14 @@ class Singleton
   String email;
   String username;
   String userID;
+  VehicleObject currentVehicle;
 
   factory Singleton()
   {
     return _singleton;
   }
 
+  void setCurrentVehicle(VehicleObject vehicle) {this.currentVehicle = vehicle;}
   void setEmail(String email) {this.email = email;}
   void setUsername(String username) {this.username = username;}
   void setUserID(String userID) {this.userID = userID;}
@@ -51,6 +53,8 @@ class Singleton
   {
     return userID;
   }
+
+  VehicleObject getCurrentVehicle() {return currentVehicle;}
 
   void clearSingleton()
   {
