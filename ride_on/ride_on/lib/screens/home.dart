@@ -122,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage>
         location = new Location();
         //currRide = new RideObject();
         currRide.setDate(DateTime.now());
+        currRide.setVehicleWithObject(currVehicle);
 
         currRide.setName(currRide.myVehicle.getNickname());
         currRide.setUserID(widget.userId);
@@ -498,21 +499,23 @@ class _MyHomePageState extends State<MyHomePage>
           title: new Text("Select your vehicle"),
           content: Container(
             width: double.maxFinite,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: mySingleton.getToys().length,
-                  itemBuilder: getListItemTile,
-                ),
-                SelectableText(
-                  'Add vehicle',
-                  onTap: () {
-                    showAddVehicleDialog(context);
-                  },
-                )
-              ]
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: mySingleton.getToys().length,
+                    itemBuilder: getListItemTile,
+                  ),
+                  SelectableText(
+                    'Add vehicle',
+                    onTap: () {
+                      showAddVehicleDialog(context);
+                    },
+                  )
+                ]
+              ),
             ),
           ),
         );
@@ -632,6 +635,7 @@ class _MyHomePageState extends State<MyHomePage>
     vehicleRef.push().set(newVehicle.toJson());
     newVehicle.getCreatedKey();
     setCurrentVehicle(newVehicle);
+    currVehicle = newVehicle;
     mySingleton.addToy(newVehicle);
   }
 }
