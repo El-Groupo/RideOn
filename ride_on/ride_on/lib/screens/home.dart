@@ -47,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage>
   static double maxSpeed = 0.0;
   var location = new Location();
   static LocationData userLocation;
+  LatLng currentLocation;
   //static String myToy = "big red";
   Timer _everySecond; //recording frequency timer
   DatabaseReference vehicleRef = FirebaseDatabase.instance.reference().child("vehicle");
