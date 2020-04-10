@@ -388,10 +388,11 @@ class _MyHomePageState extends State<MyHomePage>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     SelectableText(
                       displayCurrentVehicle(),
-                      onTap: () {
+                       onTap: () {
                         showSelectVehicle(context);
                       },
                     ),

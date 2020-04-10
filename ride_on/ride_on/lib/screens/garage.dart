@@ -13,6 +13,7 @@ import '../objects/rideObject.dart';
 import '../objects/rideObject.dart';
 import '../objects/rideObject.dart';
 import '../services/authentication.dart';
+import '../screens/vehicle.dart';
 
 
 
@@ -95,6 +96,19 @@ class _GarageRouteState extends State<GarageRoute>
             VehicleType toyType = toyList[index].toyType;
             double totalHours = toyList[index].totalVehicleHours;
             double maxSpeed = toyList[index].allTimeTopSpeed;
+            String icon;
+            if (toyType == VehicleType.motorcycle) {
+              icon = "lib/media/images/dirtbike.PNG";
+            }
+            else if (toyType == VehicleType.fourWheeler) {
+              icon = "lib/media/images/4wheeler.PNG";
+            }
+            else if (toyType == VehicleType.utv) {
+              icon = "lib/media/images/utv.PNG";
+            }
+            else {
+              icon = "lib/media/images/dirtbike.PNG";
+            }
             return Dismissible(
               key: Key(toyId),
               background: Container(color: Colors.red),
@@ -103,11 +117,17 @@ class _GarageRouteState extends State<GarageRoute>
               },
               child: ListTile(
 
-                leading: FlutterLogo(size: 56.0),
+                leading: Image.asset(icon),
                 title: Text(nickName),
                 subtitle: Text(
                     toyList[index].toString()),
                 trailing: Icon(Icons.more_vert),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => VehicleRoute(toyList[index])),
+                  );
+                },
 
               ),
             );

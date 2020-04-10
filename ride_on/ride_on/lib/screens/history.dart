@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:ride_on/objects/vehicleObject.dart';
+import 'package:ride_on/screens/ride.dart';
 import 'package:ride_on/singleton.dart';
 import '../hamburgerMenu.dart';
 import '../objects/rideObject.dart';
@@ -70,6 +72,20 @@ class _HistoryRouteState extends State<HistoryRoute>
             String userId = rideHistory[index].userId;
             int rideDuration = rideHistory[index].rideTimeSec;
             double maxSpeed = rideHistory[index].maxSpeed;
+            VehicleType toyType = rideHistory[index].myVehicle.toyType;
+            String icon;
+            if (toyType == VehicleType.motorcycle) {
+              icon = "lib/media/images/dirtbike.PNG";
+            }
+            else if (toyType == VehicleType.fourWheeler) {
+              icon = "lib/media/images/4wheeler.PNG";
+            }
+            else if (toyType == VehicleType.utv) {
+              icon = "lib/media/images/utv.PNG";
+            }
+            else {
+              icon = "lib/media/images/dirtbike.PNG";
+            }
             return Dismissible(
               key: Key(rideId),
               background: Container(color: Colors.red),
@@ -78,12 +94,18 @@ class _HistoryRouteState extends State<HistoryRoute>
               },
               child: ListTile(
 
-                leading: FlutterLogo(size: 56.0),
+                leading: Image.asset(icon),
                 title: Text(vehicleName),
                 subtitle: Text(
                     maxSpeed.toString() + " mph | " + rideDuration.toString() +
                         " seconds riding"),
                 trailing: Icon(Icons.more_vert),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RideRoute(rideHistory[index])),
+                  );
+                },
 
               ),
             );
