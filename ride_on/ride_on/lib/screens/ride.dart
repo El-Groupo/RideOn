@@ -78,7 +78,9 @@ class RideRoute extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Container(
-              constraints: BoxConstraints.expand(width: 350, height: 500),
+              constraints: BoxConstraints.expand(
+                  width: MediaQuery.of(context).size.width*.95,
+                  height: MediaQuery.of(context).size.width*.5),
               decoration: BoxDecoration(color: Colors.blue[200]),
                  child: GoogleMap(
                       onMapCreated: _onMapCreated,

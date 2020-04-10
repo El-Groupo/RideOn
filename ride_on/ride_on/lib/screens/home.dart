@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage>
   //static String myToy = "big red";
   Timer _everySecond; //recording frequency timer
   DatabaseReference vehicleRef = FirebaseDatabase.instance.reference().child("vehicle");
-
+  var displayLoc;
 
 
 
@@ -184,12 +184,10 @@ class _MyHomePageState extends State<MyHomePage>
   {
     LocationData currentLocation;
 
-    try
-    {
+    try {
       currentLocation = await location.getLocation();
     }
-    catch (e)
-    {
+    catch (e) {
       currentLocation = null;
     }
 
@@ -208,6 +206,7 @@ class _MyHomePageState extends State<MyHomePage>
         //});
         currRide.incRideTime();
         currRide.addDistance(userLocation.speed);
+        displayLoc = LatLng(userLocation.latitude, userLocation.longitude);
       }
     });
   }
@@ -377,14 +376,14 @@ class _MyHomePageState extends State<MyHomePage>
           children: <Widget>[
             Container(
               constraints: BoxConstraints.expand(
-                width: 350,                           //FIXME - Magic number
-                height: 500,                          //FIXME - Magic number
+                width: MediaQuery.of(context).size.width*.95,                           //FIXME - Magic number
+                height: MediaQuery.of(context).size.height-200,                          //FIXME - Magic number
               ),
               decoration: BoxDecoration(color: Colors.blue[200]),
               child: FutureBuilder(
                 future: _getCurrLocation(),
                 builder: (context, AsyncSnapshot<LocationData> currLoc) {
-                  var displayLoc;
+//                  var displayLoc;
                   if (currLoc.hasData) {
                     displayLoc = LatLng(currLoc.data.latitude, currLoc.data.longitude);
                     return GoogleMap(
@@ -564,6 +563,7 @@ class _MyHomePageState extends State<MyHomePage>
           currRide.setName(mySingleton.getToys()[index].getNickname());
           setCurrentVehicle(mySingleton.getToys()[index]);
         });
+        Navigator.pop(context);
       },
 
       child: Container(
