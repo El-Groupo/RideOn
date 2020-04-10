@@ -55,6 +55,7 @@ class RideRoute extends StatelessWidget
   void setPolyLines()
   {
     Polyline polyline = Polyline(
+      polylineId: PolylineId(""),
       color: Colors.blue,
       points: myRide.rideRoute
     );
@@ -75,9 +76,7 @@ class RideRoute extends StatelessWidget
             Container(
               constraints: BoxConstraints.expand(width: 350, height: 500),
               decoration: BoxDecoration(color: Colors.blue[200]),
-              child: FutureBuilder(
-                builder: (context, AsyncSnapshot<LocationData> currLocation) {
-                  return GoogleMap(
+                 child: GoogleMap(
                       onMapCreated: _onMapCreated,
                       mapType: MapType.hybrid,
                     initialCameraPosition: CameraPosition(
@@ -86,9 +85,8 @@ class RideRoute extends StatelessWidget
                     ),
                     polylines: polylines,
                     markers: markers,
-                  );
-                }
-              )
+                  )
+
             )
           ],
         )
