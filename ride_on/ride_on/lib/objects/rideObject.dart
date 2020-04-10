@@ -116,13 +116,15 @@ class RideObject
       {
         if (i%2 == 1)
         {
-          lat = coordinate;
-        }
-        else
-        {
           long = coordinate;
           rideRoute.add(LatLng(lat,long));
         }
+        else
+        {
+          lat = coordinate;
+
+        }
+        i++;
       }
   }
 }

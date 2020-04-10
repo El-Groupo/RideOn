@@ -92,8 +92,7 @@ class _HistoryRouteState extends State<HistoryRoute>
                 leading: Image.asset(icon),
                 title: Text(vehicleName),
                 subtitle: Text(
-                    maxSpeed.toStringAsFixed(2) + " mph | " + rideDuration.toString() +
-                        " seconds riding"),
+                    maxSpeed.toStringAsFixed(2) + " mph | " + getHours(rideHistory[index])),
                 trailing: Icon(Icons.more_vert),
                 onTap: () {
                   Navigator.push(
@@ -127,8 +126,18 @@ class _HistoryRouteState extends State<HistoryRoute>
         drawer: HamburgerMenu(),
         body: showRideList(),
     );
-
   }
 
-
+  String getHours(RideObject myRide) {
+    String rideTime = "0";
+    double totalMinutes = myRide.rideTimeSec / 60;
+    double hours = totalMinutes / 60;
+    double minutes = totalMinutes % 60;
+    int hrs = hours.truncate();
+    int min = totalMinutes.truncate() - (hrs * 60);
+    double seconds = (totalMinutes - min.toDouble()) * 60;
+    int sec = seconds.truncate();
+    rideTime = "Duration: " + hrs.toString() + ":" + min.toString() + "." + sec.toString().substring(0,1);
+    return rideTime;
+  }
 }
