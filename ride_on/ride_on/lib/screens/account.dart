@@ -10,6 +10,7 @@ class AccountRoute extends StatelessWidget {
   var context;
 
   signOut() async {
+    mySingleton.clearSingleton();
 
     while(Navigator.canPop(context)) {
       Navigator.pop(context);

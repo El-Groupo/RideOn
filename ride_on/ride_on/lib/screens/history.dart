@@ -46,68 +46,11 @@ class _HistoryRouteState extends State<HistoryRoute>
   var mySingleton = Singleton();
   List<RideObject> rideHistory = List();
 
-  final FirebaseDatabase _database = FirebaseDatabase.instance;
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  
-  Query rideQuery;
-  StreamSubscription<Event> _onRideAddedSubscription;
-  StreamSubscription<Event> _onRideChangedSubscription;
-  
   @override
   void initState()
   {
     super.initState();
     rideHistory = mySingleton.getRides();
-    /*
-    rideQuery = _database.reference().child("Ride")
-        .orderByChild("AssociatedUsername")
-        .equalTo(widget.userId);
-    _onRideAddedSubscription = rideQuery.onChildAdded.listen(onEntryAdded);
-    _onRideChangedSubscription =
-        rideQuery.onChildAdded.listen(onEntryChanged);
-
-     */
-  }
-
-  onEntryAdded(Event event) {
-    setState(() {
-      rideHistory.add(RideObject.fromSnapshot(event.snapshot));
-    });
-  }
-
-  onEntryChanged(Event event) {
-    var oldEntry = rideHistory.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-
-    setState(() {
-      rideHistory[rideHistory.indexOf(oldEntry)] =
-          RideObject.fromSnapshot(event.snapshot);
-    });
-  }
-
-  @override
-  void dispose() {
-    _onRideAddedSubscription.cancel();
-    _onRideChangedSubscription.cancel();
-    super.dispose();
-  }
-
-  addNewRide(RideObject rideItem) {
-    if (RideObject != null) {
-      _database.reference().child("Ride").push().set(rideItem.toJson());
-    }
-  }
-
-  /*
-  updateRide(RideO todo) {
-    //Toggle completed
-    todo.completed = !todo.completed;
-    if (todo != null) {
-      _database.reference().child("todo").child(todo.key).set(todo.toJson());
-    }
-  }
-
   }
 
   Widget showRideList()
@@ -187,13 +130,5 @@ class _HistoryRouteState extends State<HistoryRoute>
 
   }
 
-  signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.logoutCallback();
-    } catch (e) {
-      print(e);
-    }
-  }
 
 }
