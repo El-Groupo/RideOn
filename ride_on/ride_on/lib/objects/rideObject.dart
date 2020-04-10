@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:ride_on/objects/vehicleObject.dart';
+import 'package:ride_on/singleton.dart';
 
 //import vehicle class
 
@@ -16,6 +18,7 @@ class RideLocation
 class RideObject
 {
   //core stats
+  var mySingleton = Singleton();
   String userId;
   String key;
   double maxSpeed = 0.0;  //in mph
@@ -24,6 +27,8 @@ class RideObject
   List rideRoute = new List<LatLng>();
   String vehicleName;
   List test = new List<LatLng>();
+  List rideRouteDoubles = new List<double>();
+  VehicleObject myVehicle;
 
   //other info
     //vehicle
@@ -35,9 +40,33 @@ class RideObject
   double getDistance() { return rideLength * .000621371; }
   void incRideTime() { rideTimeSec++; }
   double getAvgSpeed() { return mpsTomph(rideLength / rideTimeSec);}
-  void setDate(DateTime dateIn) { rideDate = dateIn; }
+  void setDate(DateTime dateIn) {
+    rideDate = dateIn; }
   void setName(String name) { vehicleName = name; }
-  void setUserID(String userID) {this.userId = userID;}
+  void setUserID(String userID) {
+    this.userId = userID;}
+  void setRideLength(double length) {this.rideLength = length;}
+  void setRideTime(int time) {this.rideTimeSec = time;}
+  void setRideRouteDoubles (List<double> route)
+  {
+    this.rideRouteDoubles = route;
+    createRoute();
+  }
+  void setMaxSpeed(double speed) {this.maxSpeed = speed;}
+  void setVehicleWithObject(VehicleObject myVehicle) {this.myVehicle = myVehicle;}
+  void setVehicleFromDatabase()
+  {
+    VehicleObject newVehicle = new VehicleObject();
+    newVehicle.setNickname(vehicleName);
+    newVehicle.setType("other");
+    myVehicle = newVehicle;
+    for (VehicleObject vehicle in mySingleton.getToys())
+    {
+        if (vehicleName == vehicle.getNickname()) {
+          myVehicle = vehicle;
+        }
+    }
+  }
 
   String getUserID() {return userId;}
   double getRideLength() {return rideLength;}
@@ -55,7 +84,7 @@ class RideObject
         maxSpeed = snapshot.value["maxSpeed"],
         rideLength = snapshot.value["rideLength"],
         rideTimeSec = snapshot.value["rideTimeSec"],
-        rideRoute = snapshot.value["rideRoute"],
+        rideRouteDoubles = snapshot.value["rideRouteDoubles"],
         rideDate = snapshot.value["rideDate"],
         vehicleName = snapshot.value["vehicleName"];
 
@@ -72,9 +101,28 @@ class RideObject
       "maxSpeed": maxSpeed,
       "rideLength": rideLength,
       "rideTimeSec": rideTimeSec,
-      "rideRoute": myRoute,
+      "rideRouteDoubles": myRoute,
       "rideDate": rideDate.toString(),
       "vehiclename": vehicleName,
     };
+  }
+
+  void createRoute()
+  {
+    double lat = 0;
+    double long = 0;
+    int i = 0;
+    for (double coordinate in rideRouteDoubles)
+      {
+        if (i%2 == 1)
+        {
+          lat = coordinate;
+        }
+        else
+        {
+          long = coordinate;
+          rideRoute.add(LatLng(lat,long));
+        }
+      }
   }
 }
