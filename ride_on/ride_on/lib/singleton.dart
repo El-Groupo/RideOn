@@ -83,4 +83,14 @@ class Singleton
     userID = "";
   }
 
+  void sortRides()
+  {
+    myRides.sort();
+  }
+
+  void sortToys()
+  {
+    myToys.sort();
+  }
+
 }

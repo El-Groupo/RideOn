@@ -55,7 +55,6 @@ class _HistoryRouteState extends State<HistoryRoute>
 
   Widget showRideList()
   {
-
     if (rideHistory.length > 0) {
       return ListView.builder(
           shrinkWrap: true,

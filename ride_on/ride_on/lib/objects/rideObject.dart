@@ -15,7 +15,7 @@ class RideLocation
   RideLocation(latitude, longitude);
 }
 
-class RideObject
+class RideObject implements Comparable<RideObject>
 {
   //core stats
   var mySingleton = Singleton();
@@ -127,4 +127,14 @@ class RideObject
         i++;
       }
   }
+
+  @override
+  int compareTo(RideObject anotherRide)
+  {
+    if (rideDate.isAfter(anotherRide.rideDate)) {
+      return 0;
+    }
+    else return 1;
+  }
+
 }

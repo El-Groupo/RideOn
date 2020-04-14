@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 enum VehicleType {motorcycle, utv, fourWheeler, other}
 
 
-class VehicleObject
+class VehicleObject implements Comparable<VehicleObject>
 {
   VehicleObject();
 
@@ -145,5 +145,12 @@ class VehicleObject
     return vehicleDetails;
   }
 
-
+  @override
+  int compareTo(VehicleObject anotherVehicle)
+  {
+    if (purchaseDate.isAfter(anotherVehicle.purchaseDate)) {
+      return 0;
+    }
+    else return 1;
+  }
 }

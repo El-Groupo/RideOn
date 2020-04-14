@@ -129,6 +129,7 @@ class _MyHomePageState extends State<MyHomePage>
 
    rideData.push().set(currRide.toJson());
     mySingleton.addRide(currRide);
+    mySingleton.sortRides();
 
     //stuff for updating a vehicle
     currVehicle.adjustTopSpeed(maxSpeed);
@@ -335,6 +336,9 @@ class _MyHomePageState extends State<MyHomePage>
     {
       if(_isRecording) updateScreen();
     });
+
+    mySingleton.sortRides();
+    mySingleton.sortToys();
   }
 
   //2020-03-21 16:56:46.95467...
@@ -669,6 +673,7 @@ class _MyHomePageState extends State<MyHomePage>
     setCurrentVehicle(newVehicle);
     currVehicle = newVehicle;
     mySingleton.addToy(newVehicle);
+    mySingleton.sortToys();
   }
 }
 
