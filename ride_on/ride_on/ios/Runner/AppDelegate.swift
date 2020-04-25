@@ -5,24 +5,28 @@ import Firebase
 
 
 @UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate, UIResponder, UIApplicationDelegate 
+@objc class AppDelegate: FlutterAppDelegate/*, UIResponder, UIApplicationDelegate */
 {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool 
   {
+    FirebaseApp.configure() //inserted from below
     GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     GMSServices.provideAPIKey("AIzaSyA1yYLr9YgOewrJrfdrvXfQB9faw97GBGM")
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    
   }
 
-  var window: UIWindow?
-  func application(_ application: UIApplication,
+ //var window: UIWindow?
+    /*
+    override func application(_ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions:
-      [UIApplicationLaunchOptionsKey: Any]?) -> Bool 
+    [UIApplication.LaunchOptionsKey: Any]?) -> Bool
       {
         FirebaseApp.configure()
         return true
       }
+ */
 }
