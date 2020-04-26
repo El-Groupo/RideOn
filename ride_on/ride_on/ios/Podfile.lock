@@ -334,6 +334,7 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - Firebase
+  - Firebase/Analytics
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_auth_web (from `.symlinks/plugins/firebase_auth_web/ios`)
@@ -449,6 +450,6 @@ SPEC CHECKSUMS:
   sensors: 4bd31219c4bf9d7d4401b392a1701ee3adc1a296
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
 
-PODFILE CHECKSUM: b93aecd9703af7c224a05eed8816fc59ef1f7597
+PODFILE CHECKSUM: 273b927af901a490a52ea3876a034d9838dbc361
 
 COCOAPODS: 1.9.1

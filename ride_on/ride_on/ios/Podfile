@@ -39,6 +39,7 @@ target 'Runner' do
   # Firebase Pod
   
   pod 'Firebase'
+  pod 'Firebase/Analytics'
   
   # Flutter Pod
 
