@@ -1,9 +1,5 @@
 # Uncomment this line to define a global platform for your project
-<<<<<<< HEAD
 platform :ios, '11.0'
-=======
-# platform :ios, '9.0'
->>>>>>> f64149e844e2aaff4b6609f339e7313526dceb32
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -39,16 +35,12 @@ end
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-<<<<<<< HEAD
   
   # Firebase Pod
   
   pod 'Firebase'
   pod 'Firebase/Analytics'
   
-=======
-
->>>>>>> f64149e844e2aaff4b6609f339e7313526dceb32
   # Flutter Pod
 
   copied_flutter_dir = File.join(__dir__, 'Flutter')
@@ -91,12 +83,9 @@ target 'Runner' do
   end
 end
 
-<<<<<<< HEAD
 # Prevent Cocoapods from embedding a second Flutter framework and causing an error with the new Xcode build system.
 install! 'cocoapods', :disable_input_output_paths => true
 
-=======
->>>>>>> f64149e844e2aaff4b6609f339e7313526dceb32
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
