@@ -19,6 +19,7 @@ Future<void> main() async {
     options: Platform.isIOS
         ? const FirebaseOptions(
       googleAppID: '1:297855924061:ios:c6de2b69b03a5be8',
+      apiKey: 'AIzaSyCauKVGVD5ODSuviZRoLjPb7Lf0QaC6nqE',
       gcmSenderID: '297855924061',
       databaseURL: 'https://flutterfire-cd2f7.firebaseio.com',
     )
