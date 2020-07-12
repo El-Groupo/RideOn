@@ -201,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage>
   void initState()
   {
     super.initState();
-    //mySingleton.setEmail(user.data.email)
+    //mySingleton.setEmail(user.data.email);
     mySingleton.setUserID(widget.userId);
     mySingleton.myRides.clear();
     DatabaseReference rideRef = FirebaseDatabase.instance.reference().child("ride");

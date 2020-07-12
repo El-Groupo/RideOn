@@ -18,7 +18,7 @@ class RideLocation
 class RideObject implements Comparable<RideObject>
 {
   //core stats
-  var mySingleton = Singleton();
+//  var mySingleton = Singleton();
   String userId;
   String key;
   double maxSpeed = 0.0;  //in mph
@@ -55,6 +55,7 @@ class RideObject implements Comparable<RideObject>
   void setVehicleFromDatabase()
   {
     VehicleObject newVehicle = new VehicleObject();
+    var mySingleton = Singleton();
     newVehicle.setNickname(vehicleName);
     newVehicle.setType("other");
     myVehicle = newVehicle;

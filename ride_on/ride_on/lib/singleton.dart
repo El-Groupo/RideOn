@@ -9,16 +9,16 @@ import 'objects/rideObject.dart';
 import 'services/authentication.dart';
 
 
-
 class Singleton
 {
+  factory Singleton() {return _singleton;}
   Singleton.internal();
 
   static final Singleton _singleton = Singleton.internal();
   final DatabaseReference rideData = FirebaseDatabase.instance.reference().child("ride");
 
   List<RideObject> myRides = List();
-  RideObject currRide = new RideObject();
+  RideObject currRide;// = new RideObject();
   List<VehicleObject> myToys = List();
   VehicleObject currVehicle = new VehicleObject();
   String email = "";
