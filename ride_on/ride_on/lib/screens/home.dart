@@ -17,6 +17,7 @@ import '../objects/rideObject.dart';
 import '../singleton.dart';
 import 'history.dart';
 import '../accountMenu.dart';
+import 'Home/recordButton.dart';
 
 class MyHomePage extends StatefulWidget
 {
@@ -436,26 +437,27 @@ class _MyHomePageState extends State<MyHomePage>
 //                    if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
                   ]
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    FloatingActionButton(
-                      onPressed: ()
-                      {
-                        setState(()
-                        {
-                          _toggleRecording();
-                        });
-                      },
-                      tooltip: 'Begin Recording',
-                      //child: Icon(Icons.),
-                    ),
-                    Text(
-                      _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() + 's' : 'Record',
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                RecordButton(),
+//                Column(
+//                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                  crossAxisAlignment: CrossAxisAlignment.center,
+//                  children: <Widget>[
+//                    FloatingActionButton(
+//                      onPressed: ()
+//                      {
+//                        setState(()
+//                        {
+//                          _toggleRecording();
+//                        });
+//                      },
+//                      tooltip: 'Begin Recording',
+//                      //child: Icon(Icons.),
+//                    ),
+//                    Text(
+//                      _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() + 's' : 'Record',
+//                      textAlign: TextAlign.center,
+//                    ),
+//                  ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
