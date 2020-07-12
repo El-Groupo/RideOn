@@ -1,62 +1,70 @@
 //import 'dart:html';
 import 'package:flutter/material.dart';
-import 'objects/rideObject.dart';
-import 'services/authentication.dart';
+import 'package:location/location.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:ride_on/objects/vehicleObject.dart';
+import 'objects/rideObject.dart';
+import 'services/authentication.dart';
 
 
 
 class Singleton
 {
+  Singleton.internal();
+
   static final Singleton _singleton = Singleton.internal();
+  final DatabaseReference rideData = FirebaseDatabase.instance.reference().child("ride");
+
   List<RideObject> myRides = List();
+  RideObject currRide = new RideObject();
   List<VehicleObject> myToys = List();
+  VehicleObject currVehicle = new VehicleObject();
   String email = "";
   String username = "";
   String userID = "";
   VehicleObject currentVehicle;
+  bool isRecording = false;
+  Location location = new Location();
+  LocationData userLocation;
+  LatLng currLocation;
+  LatLng displayLoc;
 
-  factory Singleton()
+
+  factory Singleton() {return _singleton;}
+
+  void toggleRecording()
   {
-    return _singleton;
+    if(!isRecording)
+    {
+      isRecording = true;
+      location = new Location();
+      //currRide = new RideObject();
+      currRide.setDate(DateTime.now());
+      currRide.setVehicleWithObject(currVehicle);
+
+      currRide.setName(currRide.myVehicle.getNickname());
+      currRide.setUserID(userID);
+    }
+    else if(isRecording){
+      isRecording = false;
+      addRide(currRide);
+    }
   }
 
   void setCurrentVehicle(VehicleObject vehicle) {this.currentVehicle = vehicle;}
   void setEmail(String email) {this.email = email;}
   void setUsername(String username) {this.username = username;}
   void setUserID(String userID) {this.userID = userID;}
-  void addRide(RideObject newRide)
-  {
-    myRides.add(newRide);
-  }
-  void addToy(VehicleObject newToy)
-  {
-    myToys.add(newToy);
-  }
+  void addRide(RideObject newRide) {myRides.add(newRide);}
+  void addToy(VehicleObject newToy) {myToys.add(newToy);}
 
-  List<RideObject> getRides()
-  {
-    return myRides;
-  }
-  List<VehicleObject> getToys()
-  {
-    return myToys;
-  }
-  String getEmail()
-  {
-    return email;
-  }
-  String getUsername()
-  {
-    return username;
-  }
-  String getUserID()
-  {
-    return userID;
-  }
-
-  Singleton.internal();
+  List<RideObject> getRides() {return myRides;}
+  List<VehicleObject> getToys() {return myToys;}
+  String getEmail() {return email;}
+  String getUsername() {return username;}
+  String getUserID() {return userID;}
 
   //accountMenu (logout) items
   BaseAuth auth;
@@ -69,8 +77,9 @@ class Singleton
   VoidCallback getLogoutCallback()
   { 
      clearSingleton();
-      return logoutCallback;
+     return logoutCallback;
   }
+
 //*accountMenu Items*
   VehicleObject getCurrentVehicle() {return currentVehicle;}
 
@@ -83,14 +92,40 @@ class Singleton
     userID = "";
   }
 
-  void sortRides()
+  void sortRides() {myRides.sort();}
+  void sortToys() {myToys.sort();}
+
+  Future<LocationData> getCurrLocation() async
   {
-    myRides.sort();
+    LocationData currentLocation;
+
+    try {
+      currentLocation = await location.getLocation();
+    }
+    catch (e) {
+      currentLocation = null;
+    }
+
+    return currentLocation;
   }
 
-  void sortToys()
+  void getLocation(Stream<LocationData> stream) async
   {
-    myToys.sort();
+    try {
+      await for(LocationData value in stream)
+      {
+        currRide.setMax(value.speed);
+        currRide.addPoint(
+            LatLng(value.latitude, value.longitude));
+        userLocation = value;
+        //location.getLocation();
+      }
+    }
+    catch (e){
+//      userLocation = null;
+    }
+
+    //return currentLocation;
   }
 
 }

@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
-class RecordButton extends StatelessWidget
+import 'package:ride_on/singleton.dart';
+
+class RecordButton extends StatefulWidget
 {
   RecordButton();
 
   @override
-  Widget build(BuildContect context){
+  State<StatefulWidget> createState() => new _RecordButtonState();
+}
+
+class _RecordButtonState extends State<RecordButton>{
+  var mySingleton = Singleton();
+
+  @override
+  Widget build(BuildContext context){
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -15,14 +25,14 @@ class RecordButton extends StatelessWidget
           {
             setState(()
             {
-              _toggleRecording();
+              mySingleton.toggleRecording();
             });
           },
           tooltip: 'Begin Recording',
           //child: Icon(Icons.),
         ),
         Text(
-          _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() + 's' : 'Record',
+          mySingleton.isRecording ? 'Recording\n'+ mySingleton.currRide.rideTimeSec.toString() + 's' : 'Record',
           textAlign: TextAlign.center,
         ),
       ],
