@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:io' show Platform;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,161 +39,23 @@ class _MyHomePageState extends State<MyHomePage>
   _MyHomePageState({this.user});
 
   final FirebaseUser user;
-  //final FirebaseDatabase _database = FirebaseDatabase.instance;
-//  final DatabaseReference rideData = FirebaseDatabase.instance.reference().child("ride");
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-//  static bool _isRecording = false;
-  //RideObject currRide = new RideObject();
-  //VehicleObject currVehicle = new VehicleObject();
-//  static double maxSpeed = 0.0;
-  //var location = new Location();
-//  static LocationData userLocation;
-  //LatLng currentLocation;
-  //static String myToy = "big red";
   DatabaseReference vehicleRef = FirebaseDatabase.instance.reference().child("vehicle");
-  //var displayLoc;
-
-  //GoogleMapController mapController;
-  //void _onMapCreated(GoogleMapController controller)
-  //{
-   // mapController = controller;
-  //}
-
   static Set<Polyline> _routes = new Set<Polyline>();
-//  static int num = 0;
-
-//  saveData()
-//  {
-//    mySingleton.rideData.push().set({
-//      'userId': 'currRide.getUserID()',
-//      'maxSpeed': currRide.maxSpeed,
-//      'rideLength': currRide.rideLength,
-//      'rideTimeSec': currRide.rideTimeSec,
-//      'rideRoute': currRide.rideRoute,
-//      'rideDate': currRide.rideDate,
-//      'vehiclename': currRide.vehicleName,
-//    });
-//  }
-
-//  void grabData()
-//  {
-//    Query rideQuery = rideData.orderByChild("userId").equalTo(widget.userId);
-//    //rideQuery.
-//  }
-
-//  void addRide(RideObject rideIn)
-//  {
-//   //stuff for ride object
-////    num+= 10;
-//    var latlngList = List<LatLng>();
-//
-////    for(int i = 0; i < 100; i++)
-////      {
-////        latlngList.add(LatLng(40.2444845 + (i)/10000, -111.6474918 + (i+2*num)*(i+num)/1000000));
-////      }
-//
-//    for(int i = 0; i < rideIn.rideRoute.length; i++)
-//    {
-//      latlngList.add(rideIn.rideRoute[i]);
-//    }
-//
-//    var tempLine= new Polyline(
-//        polylineId: PolylineId(DateTime.now().toIso8601String()),
-//        points:latlngList,
-//        color: Colors.blue,//[(100 + num * 10) % 500],  //for some reason, this gives an error after a few seconds
-//        startCap: Cap.roundCap,
-//        endCap: Cap.roundCap,
-//        jointType: JointType.round,
-//        width: 5
-//    );
-//
-//    Set<Polyline> tempSet = Set<Polyline>();
-//    tempSet.add(tempLine);
-//
-////    if(_routes.isNotEmpty) {
-////      tempSet.add(_routes.last.copyWith(
-////          colorParam: Colors.blue)); //add it to the temp set with final color
-////      _routes.remove(_routes.last);
-////      _routes.
-////    }
-//    _routes = _routes.union(tempSet);
-//
-//    rideData.push().set(currRide.toJson());
-//    mySingleton.addRide(currRide);
-//    mySingleton.sortRides();
-//
-//    //stuff for updating a vehicle
-//    currVehicle.adjustTopSpeed(maxSpeed);
-//    currVehicle.adjustHours(currRide.getRideTime());
-//    currVehicle.adjustMiles(currRide.getDistance());
-//    vehicleRef.child(currVehicle.key).set(currVehicle.toJson());
-//    currRide = new RideObject();
-//    currRide.setVehicleWithObject(currVehicle);
-//  }
-
-//  void _toggleRecording()
-//  {
-//    setState(()
-//    {
-//      if(!_isRecording)
-//      {
-//        _isRecording = true;
-//        location = new Location();
-//        //currRide = new RideObject();
-//        currRide.setDate(DateTime.now());
-//        currRide.setVehicleWithObject(currVehicle);
-//
-//        currRide.setName(currRide.myVehicle.getNickname());
-//        currRide.setUserID(widget.userId);
-//      }
-//      else if(_isRecording){
-//        _isRecording = false;
-//        addRide(currRide);
-//      }
-//    });
-//  }
-
-//  void getLocation(Stream<LocationData> stream) async
-//  {
-//    try {
-//      await for(LocationData value in stream)
-//        {
-//          mySingleton.currRide.setMax(value.speed);
-//          mySingleton.currRide.addPoint(
-//              LatLng(value.latitude, value.longitude));
-//          mySingleton.userLocation = value;
-//          //location.getLocation();
-//        }
-//    }
-//    catch (e){
-////      userLocation = null;
-//    }
-//
-//    //return currentLocation;
-//  }
 
   void updateScreen()
   {
     setState(()
       {
-      if(mySingleton.isRecording)
-      {
-        mySingleton.getLocation(mySingleton.location.onLocationChanged());
-        mySingleton.currRide.incRideTime();
-        mySingleton.currRide.addDistance(mySingleton.userLocation.speed);
-        mySingleton.displayLoc = LatLng(mySingleton.userLocation.latitude, mySingleton.userLocation.longitude);
+        if(mySingleton.isRecording)
+        {
+          mySingleton.getLocation(mySingleton.location.onLocationChanged());
+          mySingleton.currRide.incRideTime();
+          mySingleton.currRide.addDistance(mySingleton.userLocation.speed);
+          mySingleton.displayLoc = LatLng(mySingleton.userLocation.latitude, mySingleton.userLocation.longitude);
+        }
       }
-    });
-  }
-
-  signOut() async {
-    try {
-      await mySingleton.auth.signOut();
-      mySingleton.logoutCallback();
-    } catch (e) {
-      print(e);
-    }
+    );
   }
 
   @override
