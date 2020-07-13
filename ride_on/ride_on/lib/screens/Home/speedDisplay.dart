@@ -14,23 +14,23 @@ class _SpeedDisplay extends State<StatefulWidget>{
   @override
   Widget build(BuildContext context){
     return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Top Speed\n' +
-                (mySingleton.isRecording ? mySingleton.currRide.maxSpeed.toStringAsFixed(1) : '--') +
-                ' mph',
-            textAlign: TextAlign.center,
-          ),
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Top Speed\n' +
+              (mySingleton.isRecording ? mySingleton.currRide.maxSpeed.toStringAsFixed(1) : '--') +
+              ' mph',
+          textAlign: TextAlign.center,
+        ),
 
-          Text(
-            'Avg Speed\n' +
-                (mySingleton.isRecording ? mySingleton.currRide.getAvgSpeed().toStringAsFixed(1) : '--') +
-                ' mph',
-            textAlign: TextAlign.center,
-          ),
-        ]
+        Text(
+          'Avg Speed\n' +
+              (mySingleton.isRecording ? mySingleton.currRide.getAvgSpeed().toStringAsFixed(1) : '--') +
+              ' mph',
+          textAlign: TextAlign.center,
+        ),
+      ]
     );
   }
 }

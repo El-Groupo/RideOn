@@ -52,6 +52,7 @@ class _VehicleDisplayState extends State<StatefulWidget>{
       vehicleRef.child(aVehicle.key).set(aVehicle.toJson());
     }
   }
+
   //Stuff for adding a vehicle, taken from the garage
   final nameController = TextEditingController();
   final dateController = TextEditingController();
@@ -62,33 +63,33 @@ class _VehicleDisplayState extends State<StatefulWidget>{
   showSelectVehicle(BuildContext context) async
   {
     await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text("Select your vehicle"),
-            content: Container(
-              width: double.maxFinite,
-              child: SingleChildScrollView(
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: mySingleton.getToys().length,
-                        itemBuilder: getListItemTile,
-                      ),
-                      SelectableText(
-                        'Add vehicle',
-                        onTap: () {
-                          showAddVehicleDialog(context);
-                        },
-                      )
-                    ]
-                ),
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Select your vehicle"),
+          content: Container(
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: mySingleton.getToys().length,
+                    itemBuilder: getListItemTile,
+                  ),
+                  SelectableText(
+                    'Add vehicle',
+                    onTap: () {
+                      showAddVehicleDialog(context);
+                    },
+                  )
+                ]
               ),
             ),
-          );
-        }
+          ),
+        );
+      }
     );
   }
 
@@ -119,58 +120,58 @@ class _VehicleDisplayState extends State<StatefulWidget>{
     nameController.clear();
     dateController.clear();
     await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: new Text("Add New Vehicle"),
-              content: Column(
-                children: <Widget>[
-                  TextFormField(
-                    controller: nameController,
-                    autofocus: true,
-                    decoration: new InputDecoration(
-                      labelText: "Vehicle Name",
-                    ),
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            title: new Text("Add New Vehicle"),
+            content: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: nameController,
+                  autofocus: true,
+                  decoration: new InputDecoration(
+                    labelText: "Vehicle Name",
                   ),
-                  TextFormField(
-                    controller: dateController,
-                    autofocus: true,
-                    decoration: new InputDecoration(
-                      labelText: "Purchase date yyyy-mm-dd",
-                    ),
+                ),
+                TextFormField(
+                  controller: dateController,
+                  autofocus: true,
+                  decoration: new InputDecoration(
+                    labelText: "Purchase date yyyy-mm-dd",
                   ),
-                  DropdownButton(
-                    hint: Text('Please select vehicle type'),
-                    value: newToyType,
-                    onChanged: (newValue) {
-                      setState(() {
-                        newToyType = newValue;
-                      });
-                    },
-                    items: VehicleType.values.map((type) {
-                      return DropdownMenuItem(
-                        child: new Text(printVehicleType(type)),
-                        value: type,
-                      );
-                    }).toList(),
-                  )
-                ],
-              ),
-              actions: <Widget>[
-                new FlatButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-                new FlatButton(
-                    child: const Text('Save'),
-                    onPressed: () {
-                      addNewVehicle(nameController.text.toString(), dateController.text.toString());
-                      Navigator.pop(context);
-                    }),
-              ]
-          );
-        });
+                ),
+                DropdownButton(
+                  hint: Text('Please select vehicle type'),
+                  value: newToyType,
+                  onChanged: (newValue) {
+                    setState(() {
+                      newToyType = newValue;
+                    });
+                  },
+                  items: VehicleType.values.map((type) {
+                    return DropdownMenuItem(
+                      child: new Text(printVehicleType(type)),
+                      value: type,
+                    );
+                  }).toList(),
+                )
+              ],
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              new FlatButton(
+                  child: const Text('Save'),
+                  onPressed: () {
+                    addNewVehicle(nameController.text.toString(), dateController.text.toString());
+                    Navigator.pop(context);
+                  }),
+            ]
+        );
+      });
   }
 
   String printVehicleType(VehicleType type) {
@@ -225,7 +226,7 @@ class _VehicleDisplayState extends State<StatefulWidget>{
           'Current Speed\n' +
               ((mySingleton.userLocation != null && mySingleton.isRecording) ?
               mpsTomph(mySingleton.userLocation.speed).toStringAsFixed(2) + ' mph' : ''
-              ),
+          ),
         ),
       ]
     );

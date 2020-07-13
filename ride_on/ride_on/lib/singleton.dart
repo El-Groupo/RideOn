@@ -118,11 +118,6 @@ class Singleton
         //location.getLocation();
       }
     }
-    catch (e){
-//      userLocation = null;
-    }
-
-    //return currentLocation;
+    catch (e){}
   }
-
 }

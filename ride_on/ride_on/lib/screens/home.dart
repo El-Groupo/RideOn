@@ -3,15 +3,16 @@ import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ride_on/objects/vehicleObject.dart';
 
-import '../services/authentication.dart';
-import '../hamburgerMenu.dart';
-import '../objects/rideObject.dart';
-import '../singleton.dart';
-import '../accountMenu.dart';
-import 'Home/bottomBar.dart';
-import 'Home/mapDisplay.dart';
+import 'package:ride_on/objects/vehicleObject.dart';
+import 'package:ride_on/services/authentication.dart';
+import 'package:ride_on/hamburgerMenu.dart';
+import 'package:ride_on/objects/rideObject.dart';
+import 'package:ride_on/singleton.dart';
+import 'package:ride_on/accountMenu.dart';
+import 'package:ride_on/screens/Home/mapDisplay.dart';
+import 'package:ride_on/screens/Home/bottomBar.dart';
+
 
 class MyHomePage extends StatefulWidget
 {
@@ -201,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage>
           if (user.hasData) {
             mySingleton.setEmail(user.data.email);
             mySingleton.setUserID(user.data.uid);
-            return HamburgerMenu();//.setUser("user.data.uid", "user.data.email");
+            return HamburgerMenu();
           }
           else {
             return Text('Loading...');
@@ -213,305 +214,12 @@ class _MyHomePageState extends State<MyHomePage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             MapDisplay(),
-//            Container(
-//              constraints: BoxConstraints.expand(
-//                width: MediaQuery.of(context).size.width*.95,
-//                height: MediaQuery.of(context).size.height-200,
-//              ),
-//              decoration: BoxDecoration(color: Colors.blue[200]),
-//              child: FutureBuilder(
-//                future: _getCurrLocation(),
-//                builder: (context, AsyncSnapshot<LocationData> currLoc) {
-////                  var displayLoc;
-//                  if (currLoc.hasData) {
-//                    displayLoc = LatLng(currLoc.data.latitude, currLoc.data.longitude);
-//                    return GoogleMap(
-//                      onMapCreated: _onMapCreated,
-//                      mapType: MapType.hybrid,
-//                      myLocationEnabled: true,
-//                      initialCameraPosition: CameraPosition(
-//                        target: displayLoc,
-//                        //LatLng(40.2463985, -111.6541483),
-////                      (userLocation == null ? 40.2463985 : userLocation.latitude),         FIXED??
-////                      (userLocation == null ? -111.6541483 : userLocation.longitude)       FIXED??
-//
-//                        zoom: 17.0,
-//                      ),
-//                      polylines: _routes,
-//                    );
-//                  }
-//                  else {
-//                    return Text(
-//                      "Loading...",
-//                      textAlign: TextAlign.center,
-//                      style: TextStyle(
-//                        fontSize: 30,
-//                      ),
-//                    );
-//                  }
-//                },
-//              ),
-//            ),
             BottomBar(),
-//            Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//              children: <Widget>[
-//                Column(
-//                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                  children: <Widget>[
-//                    SelectableText(
-//                      displayCurrentVehicle(),
-//                       onTap: () {
-//                        showSelectVehicle(context);
-//                      },
-//                    ),
-//                    Text(
-//                      'Current Speed\n' +
-//                          ((userLocation != null && _isRecording) ?
-//                          mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph' : ''
-//                          ),
-//                    ),
-////                    if(_isRecording) Text(mpsTomph(userLocation.speed).toStringAsFixed(2) + ' mph'),
-//                  ]
-//                ),
-////                RecordButton(),
-//                Column(
-//                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                  crossAxisAlignment: CrossAxisAlignment.center,
-//                  children: <Widget>[
-//                    FloatingActionButton(
-//                      onPressed: ()
-//                      {
-//                        setState(()
-//                        {
-//                          _toggleRecording();
-//                        });
-//                      },
-//                      tooltip: 'Begin Recording',
-//                      //child: Icon(Icons.),
-//                    ),
-//                    Text(
-//                      _isRecording ? 'Recording\n'+ currRide.rideTimeSec.toString() + 's' : 'Record',
-//                      textAlign: TextAlign.center,
-//                    ),
-//                  ],
-//                ),
-//                Column(
-//                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                  crossAxisAlignment: CrossAxisAlignment.center,
-//                  children: <Widget>[
-//                    Text(
-//                      'Top Speed\n' +
-//                          (_isRecording ? currRide.maxSpeed.toStringAsFixed(1) : '--') +
-//                          ' mph',
-//                        textAlign: TextAlign.center,
-//                    ),
-//
-//                    Text(
-//                      'Avg Speed\n' +
-//                          (_isRecording ? currRide.getAvgSpeed().toStringAsFixed(1) : '--') +
-//                          ' mph',
-//                      textAlign: TextAlign.center,
-//                    ),
-//                  ]
-//                )
-//              ]
-//            ),
           ],
         ),
       ),
     );
   }
-
-//  String displayCurrentVehicle()
-//  {
-//    String nickname = "vehicle not selected";
-//    for (VehicleObject vehicleObject in mySingleton.getToys())
-//    {
-//        if (vehicleObject.isCurrentVehicle) {
-//          currRide.setVehicleWithObject(vehicleObject);
-//          nickname = vehicleObject.getNickname();
-//          currVehicle = vehicleObject;
-//        }
-//    }
-//    return nickname;
-//  }
-//
-//  void setCurrentVehicle(VehicleObject vehicle)
-//  {
-//    for (VehicleObject aVehicle in mySingleton.getToys())
-//    {
-//      if (aVehicle.getNickname() == vehicle.getNickname()) {
-//        currRide.setVehicleWithObject(vehicle);
-//        aVehicle.setIsCurrentVehicle(true);
-//        currVehicle = aVehicle;
-//      }
-//      else {
-//        aVehicle.setIsCurrentVehicle(false);
-//      }
-//      vehicleRef.child(aVehicle.key).set(aVehicle.toJson());
-//    }
-//  }
-
-
-
-////Stuff for adding a vehicle, taken from the garage
-//  final nameController = TextEditingController();
-//  final dateController = TextEditingController();
-//  DateTime newPurchaseDate;
-//  String newToyNickname = "";
-//  VehicleType newToyType;
-
-//  showSelectVehicle(BuildContext context) async
-//  {
-//    await showDialog<String>(
-//      context: context,
-//      builder: (BuildContext context) {
-//        return AlertDialog(
-//          title: new Text("Select your vehicle"),
-//          content: Container(
-//            width: double.maxFinite,
-//            child: SingleChildScrollView(
-//              child: Column(
-//                mainAxisSize: MainAxisSize.min,
-//                children: <Widget>[
-//                  ListView.builder(
-//                    shrinkWrap: true,
-//                    itemCount: mySingleton.getToys().length,
-//                    itemBuilder: getListItemTile,
-//                  ),
-//                  SelectableText(
-//                    'Add vehicle',
-//                    onTap: () {
-//                      showAddVehicleDialog(context);
-//                    },
-//                  )
-//                ]
-//              ),
-//            ),
-//          ),
-//        );
-//      }
-//    );
-//  }
-
-//  Widget getListItemTile(BuildContext context, int index)
-//  {
-//    return GestureDetector(
-//      onTap: () {
-//        setState(() {
-//          currRide.setVehicleWithObject(mySingleton.getToys()[index]);
-//          currRide.setName(mySingleton.getToys()[index].getNickname());
-//          setCurrentVehicle(mySingleton.getToys()[index]);
-//        });
-//        Navigator.pop(context);
-//      },
-//
-//      child: Container(
-//        margin: EdgeInsets.symmetric(vertical: 4),
-//        color: Colors.white,
-//        child: ListTile(
-//          title: Text(mySingleton.getToys()[index].getNickname()),
-//        ),
-//      ),
-//    );
-//  }
-
-//  showAddVehicleDialog(BuildContext context) async
-//  {
-//    nameController.clear();
-//    dateController.clear();
-//    await showDialog<String>(
-//        context: context,
-//        builder: (BuildContext context) {
-//          return AlertDialog(
-//              title: new Text("Add New Vehicle"),
-//              content: Column(
-//                children: <Widget>[
-//                  TextFormField(
-//                    controller: nameController,
-//                    autofocus: true,
-//                    decoration: new InputDecoration(
-//                      labelText: "Vehicle Name",
-//                    ),
-//                  ),
-//                  TextFormField(
-//                    controller: dateController,
-//                    autofocus: true,
-//                    decoration: new InputDecoration(
-//                      labelText: "Purchase date yyyy-mm-dd",
-//                    ),
-//                  ),
-//                  DropdownButton(
-//                    hint: Text('Please select vehicle type'),
-//                    value: newToyType,
-//                    onChanged: (newValue) {
-//                      setState(() {
-//                        newToyType = newValue;
-//                      });
-//                    },
-//                    items: VehicleType.values.map((type) {
-//                      return DropdownMenuItem(
-//                        child: new Text(printVehicleType(type)),
-//                        value: type,
-//                      );
-//                    }).toList(),
-//                  )
-//                ],
-//              ),
-//              actions: <Widget>[
-//                new FlatButton(
-//                    child: const Text('Cancel'),
-//                    onPressed: () {
-//                      Navigator.pop(context);
-//                    }),
-//                new FlatButton(
-//                    child: const Text('Save'),
-//                    onPressed: () {
-//                      addNewVehicle(nameController.text.toString(), dateController.text.toString());
-//                      Navigator.pop(context);
-//                    }),
-//              ]
-//          );
-//        });
-//  }
-
-//  String printVehicleType(VehicleType type) {
-//    String vehicleType = "";
-//    switch(type)
-//    {
-//      case VehicleType.motorcycle:
-//        vehicleType += "Motorcycle";
-//        break;
-//      case VehicleType.fourWheeler:
-//        vehicleType += "4 Wheeler";
-//        break;
-//      case VehicleType.utv:
-//        vehicleType += "UTV";
-//        break;
-//      case VehicleType.other:
-//        vehicleType += "Other";
-//        break;
-//    }
-//    return vehicleType;
-//  }
-
-//  void addNewVehicle(String name, String date)
-//  {
-//    VehicleObject newVehicle = new VehicleObject();
-//    newVehicle.setNickname(name);
-//    newVehicle.setPurchaseDate(parseDate(date));
-//    newVehicle.setEnumType(newToyType);
-//    newVehicle.setTopSpeed(0.0);
-//    newVehicle.setTotalHours(0.0);
-//    newVehicle.setUserId(mySingleton.userID);
-//    vehicleRef.push().set(newVehicle.toJson());
-//    newVehicle.getCreatedKey();
-//    setCurrentVehicle(newVehicle);
-//    currVehicle = newVehicle;
-//    mySingleton.addToy(newVehicle);
-//    mySingleton.sortToys();
-//  }
 }
 
 
