@@ -18,7 +18,7 @@ class Singleton
   final DatabaseReference rideData = FirebaseDatabase.instance.reference().child("ride");
 
   List<RideObject> myRides = List();
-  RideObject currRide;// = new RideObject();
+  RideObject currRide = new RideObject();
   List<VehicleObject> myToys = List();
   VehicleObject currVehicle = new VehicleObject();
   String email = "";
@@ -30,9 +30,6 @@ class Singleton
   LocationData userLocation;
   LatLng currLocation;
   LatLng displayLoc;
-
-
-  factory Singleton() {return _singleton;}
 
   void toggleRecording()
   {

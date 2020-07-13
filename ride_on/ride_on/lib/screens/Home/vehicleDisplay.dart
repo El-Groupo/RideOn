@@ -28,8 +28,7 @@ class _VehicleDisplayState extends State<StatefulWidget>{
   String displayCurrentVehicle()
   {
     String nickname = "vehicle not selected";
-    for (VehicleObject vehicleObject in mySingleton.getToys())
-    {
+    for (VehicleObject vehicleObject in mySingleton.getToys()){
       if (vehicleObject.isCurrentVehicle) {
         mySingleton.currRide.setVehicleWithObject(vehicleObject);
         nickname = vehicleObject.getNickname();
@@ -39,8 +38,7 @@ class _VehicleDisplayState extends State<StatefulWidget>{
     return nickname;
   }
 
-  void setCurrentVehicle(VehicleObject vehicle)
-  {
+  void setCurrentVehicle(VehicleObject vehicle){
     for (VehicleObject aVehicle in mySingleton.getToys())
     {
       if (aVehicle.getNickname() == vehicle.getNickname()) {
