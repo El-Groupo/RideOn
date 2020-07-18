@@ -21,7 +21,7 @@ import '../accountMenu.dart';
 class MyHomePage extends StatefulWidget
 {
 
-  MyHomePage({Key key, this.title, this.auth, this.userId, this.logoutCallback}) : super(key: key)
+  MyHomePage({Key key, this.title, /*this.app,*/ this.auth, this.userId, this.logoutCallback}) : super(key: key)
   {
     theSingleton = Singleton();
     theSingleton.setAuth(auth);
@@ -59,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage>
   Timer _everySecond; //recording frequency timer
   DatabaseReference vehicleRef = FirebaseDatabase.instance.reference().child("vehicle");
   var displayLoc;
+
+
 
   GoogleMapController mapController;
   void _onMapCreated(GoogleMapController controller)
@@ -125,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage>
 //    }
     _routes = _routes.union(tempSet);
 
-    rideData.push().set(currRide.toJson());
+   rideData.push().set(currRide.toJson());
     mySingleton.addRide(currRide);
     mySingleton.sortRides();
 
@@ -378,8 +380,8 @@ class _MyHomePageState extends State<MyHomePage>
           children: <Widget>[
             Container(
               constraints: BoxConstraints.expand(
-                width: MediaQuery.of(context).size.width*.95,
-                height: MediaQuery.of(context).size.height-200,
+                width: MediaQuery.of(context).size.width*.95,                           //FIXME - Magic number
+                height: MediaQuery.of(context).size.height-200,                          //FIXME - Magic number
               ),
               decoration: BoxDecoration(color: Colors.blue[200]),
               child: FutureBuilder(
