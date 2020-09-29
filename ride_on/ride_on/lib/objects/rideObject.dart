@@ -18,7 +18,7 @@ class RideLocation
 class RideObject implements Comparable<RideObject>
 {
   //core stats
-  var mySingleton = Singleton();
+//  var mySingleton = Singleton();
   String userId;
   String key;
   double maxSpeed = 0.0;  //in mph
@@ -34,17 +34,15 @@ class RideObject implements Comparable<RideObject>
     //vehicle
   DateTime rideDate; //ride date
 
-  void addPoint(LatLng newPoint) { rideRoute.add(newPoint); }
-  void setMax(double newMax) { maxSpeed = (mpsTomph(newMax) > maxSpeed) ? mpsTomph(newMax) : maxSpeed; }
-  void addDistance(double distanceIn) { rideLength += distanceIn; }
-  double getDistance() { return rideLength * .000621371; }
-  void incRideTime() { rideTimeSec++; }
-  double getAvgSpeed() { return mpsTomph(rideLength / rideTimeSec);}
-  void setDate(DateTime dateIn) {
-    rideDate = dateIn; }
-  void setName(String name) { vehicleName = name; }
-  void setUserID(String userID) {
-    this.userId = userID;}
+  void addPoint(LatLng newPoint) {rideRoute.add(newPoint);}
+  void setMax(double newMax) {maxSpeed = (mpsTomph(newMax) > maxSpeed) ? mpsTomph(newMax) : maxSpeed;}
+  void addDistance(double distanceIn) {rideLength += distanceIn;}
+  double getDistance() {return rideLength * .000621371;}
+  void incRideTime() {rideTimeSec++;}
+  double getAvgSpeed() {return mpsTomph(rideLength / rideTimeSec);}
+  void setDate(DateTime dateIn) {rideDate = dateIn;}
+  void setName(String name) {vehicleName = name;}
+  void setUserID(String userID) {this.userId = userID;}
   void setRideLength(double length) {this.rideLength = length;}
   void setRideTime(int time) {this.rideTimeSec = time;}
   void setRideRouteDoubles (List<double> route)
@@ -57,6 +55,7 @@ class RideObject implements Comparable<RideObject>
   void setVehicleFromDatabase()
   {
     VehicleObject newVehicle = new VehicleObject();
+    var mySingleton = Singleton();
     newVehicle.setNickname(vehicleName);
     newVehicle.setType("other");
     myVehicle = newVehicle;
@@ -122,7 +121,6 @@ class RideObject implements Comparable<RideObject>
         else
         {
           lat = coordinate;
-
         }
         i++;
       }
@@ -136,5 +134,4 @@ class RideObject implements Comparable<RideObject>
     }
     else return 1;
   }
-
 }
