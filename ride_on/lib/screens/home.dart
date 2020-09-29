@@ -20,6 +20,10 @@ class MyHomePage extends StatefulWidget {
     theSingleton.setAuth(auth);
     theSingleton.setLogoutCallback(logoutCallback);
     theSingleton.userID = userId;
+    FirebaseAuth.instance.currentUser().then((user) {
+      theSingleton.setEmail(user.email);
+      theSingleton.setUserID(user.uid);
+    });
   }
 
   var theSingleton;
@@ -178,18 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
           AccountMenu(),
         ],
       ),
-      drawer: FutureBuilder(
-        future: FirebaseAuth.instance.currentUser(),
-        builder: (context, AsyncSnapshot<FirebaseUser> user) {
-          if (user.hasData) {
-            mySingleton.setEmail(user.data.email);
-            mySingleton.setUserID(user.data.uid);
-            return HamburgerMenu();
-          } else {
-            return Text('Loading...');
-          }
-        },
-      ),
+      drawer: HamburgerMenu(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
